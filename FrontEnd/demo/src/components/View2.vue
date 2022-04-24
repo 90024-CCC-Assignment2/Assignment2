@@ -1,11 +1,85 @@
 <template>
   <b-container class="bv-example-row" fluid style='padding: 0px; width: 100%; margin: 0px; border: 0px'>
     <b-row style='padding: 0px; margin: 0px; border: 0px'>
-      <b-col xl="10" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
+      <b-col xl="9" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
         <div id='map' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 900px;'></div>
       </b-col>
-      <b-col xl="2" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
-        1 of 3
+      <b-col xl="3" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
+        <b-list-group style="max-height: 900px; overflow: scroll; padding: 0px; margin: 0px; border: 0px">
+          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
+            <b-modal id="bv-modal-example" hide-footer size="lg">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List Group item heading</h5>
+                <small>3 days ago</small>
+              </div>
+              <p class="mb-1">
+                Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+                Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+                Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+                Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+              </p>
+              <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="750px" height="400px">
+            </b-modal>
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">List Group item heading</h5>
+              <small>3 days ago</small>
+            </div>
+            <p class="mb-1">
+              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+            </p>
+            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
+          </b-list-group-item>
+          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">List Group item heading</h5>
+              <small>3 days ago</small>
+            </div>
+            <p class="mb-1">
+              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+            </p>
+            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
+          </b-list-group-item>
+          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">List Group item heading</h5>
+              <small>3 days ago</small>
+            </div>
+            <p class="mb-1">
+              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+            </p>
+            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
+          </b-list-group-item>
+          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">List Group item heading</h5>
+              <small>3 days ago</small>
+            </div>
+            <p class="mb-1">
+              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+            </p>
+            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
+          </b-list-group-item>
+          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">List Group item heading</h5>
+              <small>3 days ago</small>
+            </div>
+            <p class="mb-1">
+              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+            </p>
+            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
+          </b-list-group-item>
+          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">List Group item heading</h5>
+              <small>3 days ago</small>
+            </div>
+            <p class="mb-1">
+              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+            </p>
+            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
+          </b-list-group-item>
+        </b-list-group>
       </b-col>
     </b-row>
   </b-container>
@@ -38,7 +112,7 @@ export default {
             'type': 'Feature',
             'properties': {
               'description':
-                '<strong>abc</strong><img src="https://pbs.twimg.com/media/EYeX7akWsAIP1_1.jpg" width="200px">'
+                '<strong>abc</strong><img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="200px">'
             },
             'geometry': {
               'type': 'Point',
