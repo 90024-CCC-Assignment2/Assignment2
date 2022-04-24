@@ -1,0 +1,290 @@
+{
+    "_id": "6f01fa54217631cd7834e5fb6700d852",
+    "_rev": "1-5b3c1b87a6853c1c03dbc753afd55027",
+    "created_at": "Sat Apr 23 09:06:48 +0000 2022",
+    "id": 1517792093535539200,
+    "id_str": "1517792093535539201",
+    "text": "Off to see @GlennShorrock &amp; @realbriancadd this week at Frankston! Can't wait. Shd be a great gig - hope the #Axiom… https://t.co/VjYPk7P3Vs",
+    "display_text_range": [
+      0,
+      140
+    ],
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "truncated": true,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 130965104,
+      "id_str": "130965104",
+      "name": "Sheeds",
+      "screen_name": "Sheeds_au",
+      "location": "Melbourne, Australia.",
+      "url": "http://sheeds.com.au",
+      "description": "Dad, Geek, Photography, Beach-life. 80's. Vinyl music. Randomly off-topic - former WP Guru. Crohn's Disease. Sales Professional. Hopefully not too cynical.",
+      "translator_type": "none",
+      "protected": false,
+      "verified": false,
+      "followers_count": 2385,
+      "friends_count": 2750,
+      "listed_count": 136,
+      "favourites_count": 38062,
+      "statuses_count": 80659,
+      "created_at": "Thu Apr 08 21:48:49 +0000 2010",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": null,
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "000000",
+      "profile_background_image_url": "http://abs.twimg.com/images/themes/theme4/bg.gif",
+      "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme4/bg.gif",
+      "profile_background_tile": false,
+      "profile_link_color": "19CF86",
+      "profile_sidebar_border_color": "000000",
+      "profile_sidebar_fill_color": "000000",
+      "profile_text_color": "000000",
+      "profile_use_background_image": false,
+      "profile_image_url": "http://pbs.twimg.com/profile_images/1237255082476855296/gjhSMNqx_normal.jpg",
+      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1237255082476855296/gjhSMNqx_normal.jpg",
+      "profile_banner_url": "https://pbs.twimg.com/profile_banners/130965104/1583819515",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null,
+      "withheld_in_countries": []
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": null,
+    "contributors": null,
+    "is_quote_status": false,
+    "extended_tweet": {
+      "full_text": "Off to see @GlennShorrock &amp; @realbriancadd this week at Frankston! Can't wait. Shd be a great gig - hope the #Axiom singles are on the setlist! Just nabbed this fantastic Raven Records release from 1982! #TheTwilights #live in #Melbourne '66-67 #vinyl #ausrock #60s #nowspinning https://t.co/L8RXbBVeDG",
+      "display_text_range": [
+        0,
+        282
+      ],
+      "entities": {
+        "hashtags": [
+          {
+            "text": "Axiom",
+            "indices": [
+              113,
+              119
+            ]
+          },
+          {
+            "text": "TheTwilights",
+            "indices": [
+              208,
+              221
+            ]
+          },
+          {
+            "text": "live",
+            "indices": [
+              222,
+              227
+            ]
+          },
+          {
+            "text": "Melbourne",
+            "indices": [
+              231,
+              241
+            ]
+          },
+          {
+            "text": "vinyl",
+            "indices": [
+              249,
+              255
+            ]
+          },
+          {
+            "text": "ausrock",
+            "indices": [
+              256,
+              264
+            ]
+          },
+          {
+            "text": "60s",
+            "indices": [
+              265,
+              269
+            ]
+          },
+          {
+            "text": "nowspinning",
+            "indices": [
+              270,
+              282
+            ]
+          }
+        ],
+        "urls": [],
+        "user_mentions": [
+          {
+            "screen_name": "GlennShorrock",
+            "name": "Glenn Shorrock",
+            "id": 61413863,
+            "id_str": "61413863",
+            "indices": [
+              11,
+              25
+            ]
+          },
+          {
+            "screen_name": "realbriancadd",
+            "name": "Brian Cadd",
+            "id": 1042443334298554400,
+            "id_str": "1042443334298554369",
+            "indices": [
+              32,
+              46
+            ]
+          }
+        ],
+        "symbols": [],
+        "media": [
+          {
+            "id": 1517792083246870500,
+            "id_str": "1517792083246870528",
+            "indices": [
+              283,
+              306
+            ],
+            "media_url": "http://pbs.twimg.com/media/FRBH26zUcAAGjK4.jpg",
+            "media_url_https": "https://pbs.twimg.com/media/FRBH26zUcAAGjK4.jpg",
+            "url": "https://t.co/L8RXbBVeDG",
+            "display_url": "pic.twitter.com/L8RXbBVeDG",
+            "expanded_url": "https://twitter.com/Sheeds_au/status/1517792093535539201/photo/1",
+            "type": "photo",
+            "sizes": {
+              "medium": {
+                "w": 943,
+                "h": 1200,
+                "resize": "fit"
+              },
+              "thumb": {
+                "w": 150,
+                "h": 150,
+                "resize": "crop"
+              },
+              "small": {
+                "w": 534,
+                "h": 680,
+                "resize": "fit"
+              },
+              "large": {
+                "w": 1610,
+                "h": 2048,
+                "resize": "fit"
+              }
+            }
+          }
+        ]
+      },
+      "extended_entities": {
+        "media": [
+          {
+            "id": 1517792083246870500,
+            "id_str": "1517792083246870528",
+            "indices": [
+              283,
+              306
+            ],
+            "media_url": "http://pbs.twimg.com/media/FRBH26zUcAAGjK4.jpg",
+            "media_url_https": "https://pbs.twimg.com/media/FRBH26zUcAAGjK4.jpg",
+            "url": "https://t.co/L8RXbBVeDG",
+            "display_url": "pic.twitter.com/L8RXbBVeDG",
+            "expanded_url": "https://twitter.com/Sheeds_au/status/1517792093535539201/photo/1",
+            "type": "photo",
+            "sizes": {
+              "medium": {
+                "w": 943,
+                "h": 1200,
+                "resize": "fit"
+              },
+              "thumb": {
+                "w": 150,
+                "h": 150,
+                "resize": "crop"
+              },
+              "small": {
+                "w": 534,
+                "h": 680,
+                "resize": "fit"
+              },
+              "large": {
+                "w": 1610,
+                "h": 2048,
+                "resize": "fit"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "quote_count": 0,
+    "reply_count": 0,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [
+        {
+          "text": "Axiom",
+          "indices": [
+            113,
+            119
+          ]
+        }
+      ],
+      "urls": [
+        {
+          "url": "https://t.co/VjYPk7P3Vs",
+          "expanded_url": "https://twitter.com/i/web/status/1517792093535539201",
+          "display_url": "twitter.com/i/web/status/1…",
+          "indices": [
+            121,
+            144
+          ]
+        }
+      ],
+      "user_mentions": [
+        {
+          "screen_name": "GlennShorrock",
+          "name": "Glenn Shorrock",
+          "id": 61413863,
+          "id_str": "61413863",
+          "indices": [
+            11,
+            25
+          ]
+        },
+        {
+          "screen_name": "realbriancadd",
+          "name": "Brian Cadd",
+          "id": 1042443334298554400,
+          "id_str": "1042443334298554369",
+          "indices": [
+            32,
+            46
+          ]
+        }
+      ],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "en",
+    "timestamp_ms": "1650704808969"
+  }
