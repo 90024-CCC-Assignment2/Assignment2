@@ -2,6 +2,9 @@ import configparser
 import requests
 import json
 from collections import Counter
+from utils import db_client, sentiment_classification
+from utils.Configuration import *
+from torch.utils.data import Dataset, DataLoader
 
 from mpi4py import MPI
 import tweepy
@@ -18,10 +21,6 @@ around 10-15 tweets/min.
 parser = configparser.ConfigParser()
 parser.read("credentials.ini")
 # Define some static variables
-DBS = ["twitter"]  # our databases
-USER_NAME = parser['CouchDB']['admin']
-PASSWORD = parser['CouchDB']['password']
-
 MELBOURNE_CITY_BOUNDING_BOX = [144.932, -37.882, 144.996, -37.775]  # ????
 
 THRESHOLD = 60
@@ -67,13 +66,13 @@ class TwitterAuthenticator:
     We use id to assign the api credential of this particular process (process id in a multi-process situaiton)
     """
 
-    def __init__(self, id):
+    def __init__(self):
         # parser = configparser.ConfigParser()
         # parser.read("credential.ini")
-        self.api_key = parser["Twitter{}".format(id)]["api_key"]
-        self.api_key_secret = parser["Twitter{}".format(id)]["api_key_secret"]
-        self.access_token = parser["Twitter{}".format(id)]["access_token"]
-        self.access_token_secret = parser["Twitter{}".format(id)]["access_token_secret"]
+        self.api_key = parser["Twitter{}".format(0)]["api_key"]
+        self.api_key_secret = parser["Twitter{}".format(0)]["api_key_secret"]
+        self.access_token = parser["Twitter{}".format(0)]["access_token"]
+        self.access_token_secret = parser["Twitter{}".format(0)]["access_token_secret"]
     
     def authenticate(self):
         auth = tweepy.OAuthHandler(self.api_key, self.api_key_secret)
@@ -85,22 +84,25 @@ class TwitterAuthenticator:
         return self.api_key, self.api_key_secret, self.access_token, self.access_token_secret
 
 
-class TwitterStreamListner(tweepy.Stream):
+class TwitterStreamListener(tweepy.Stream):
     """
     Class for processing streaming twitters
     """
     def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret, rows, columns, **kwargs):
         super().__init__(consumer_key, consumer_secret, access_token, access_token_secret, **kwargs)
         self.grid_worker = LocationCounter(rows, columns)
-        self.accumulator = 0
+        self.buffer = []
+        self.db_client = db_client.DBClient(USER_NAME, PASSWORD, URL)
+        self.sentiment_classifier = sentiment_classification.SentimentClassifier()
 
     def on_status(self, status):
-        self.process(status)
+        self.buffer.append(status)
+        if len(self.buffer) > THRESHOLD:
+            self.process()
+
+        time.sleep(500)
         # avoid rate limit
-        self.accumulator += 1
-        if self.accumulator >= THRESHOLD:
-            time.sleep(600)  # sleep for 10 minutes
-            self.accumulator = 0
+        self.buffer.clear()
 
         return True
 
@@ -109,15 +111,18 @@ class TwitterStreamListner(tweepy.Stream):
             return False
         print(status_code)
 
-    def process(self, status):
+    def process(self):
         """
         for now we just hand the twitter over tocouchdb and do area counting
         """
+
         # TODO not quite sure if it is a good strategy to establish short http connection to couchdb everytime receiving a new json data 
-        try:
-            data_to_store = status._json
-        except:
-            return
+        for status in self.buffer:
+            try:
+                data_to_store = status._json
+            except:
+                continue
+
         # TODO How are we actually going to do this? 
         db = DBS[communicator.Get_rank()]
         response = requests.post("http://" + USER_NAME + ":" + PASSWORD + "@172.17.0.4:5984/" + db, json=data_to_store)
@@ -145,18 +150,19 @@ class LocationCounter:
             pass
 
 
-if __name__ == "__main__":
-    tweet_api = tweepy.API(TwitterAuthenticator(communicator.Get_rank()).authenticate(), wait_on_rate_limit=True)
-    melbourne = Grid(5, 5)
-    process_rank = communicator.Get_rank()
-    api_key, api_key_secret, access_token, access_token_secret = TwitterAuthenticator(communicator.Get_rank()).get_keys()
-    streamer = TwitterStreamListner(api_key, api_key_secret, access_token, access_token_secret, 5, 5)
-    if process_rank == 0:
-        # streamer.filter(track=[""])  # TODO fill in the coordinate filter rule
-        streamer.filter(track=RULES, locations=MELBOURNE_CITY_BOUNDING_BOX)
-        # pass
-    else:
-        rule = RULES[process_rank-1]
-        streamer.filter(track=["melbourne {}".format(rule)], languages=["en"])
- 
+def main():
+    tweet_api = tweepy.API(TwitterAuthenticator().authenticate(), wait_on_rate_limit=True)
+    api_key, api_key_secret, access_token, access_token_secret = TwitterAuthenticator().get_keys()
+    streamer = TwitterStreamListener(api_key, api_key_secret, access_token, access_token_secret, 5, 5)
+    streamer.filter(track=[])
 
+
+if __name__ == "__main__":
+    # if process_rank == 0:
+    #     # streamer.filter(track=[""])  # TODO fill in the coordinate filter rule
+    #     streamer.filter(track=RULES, locations=MELBOURNE_CITY_BOUNDING_BOX)
+    #     # pass
+    # else:
+    #     rule = RULES[process_rank-1]
+    #     streamer.filter(track=["melbourne {}".format(rule)], languages=["en"])
+    pass
