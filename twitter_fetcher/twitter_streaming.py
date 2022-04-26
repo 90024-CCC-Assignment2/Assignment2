@@ -5,6 +5,7 @@ from collections import Counter
 
 from mpi4py import MPI
 import tweepy
+import time
 
 
 """
@@ -17,12 +18,13 @@ around 10-15 tweets/min.
 parser = configparser.ConfigParser()
 parser.read("credentials.ini")
 # Define some static variables
-DBS = ["test"]  # our databases
+DBS = ["twitter"]  # our databases
 USER_NAME = parser['CouchDB']['admin']
 PASSWORD = parser['CouchDB']['password']
 
 MELBOURNE_CITY_BOUNDING_BOX = [144.932, -37.882, 144.996, -37.775]  # ????
 
+THRESHOLD = 60
 RULES = ["graffiti", "street art", "painting"]  # TODO to be added
 ###################### 
 communicator = MPI.COMM_WORLD
@@ -90,9 +92,15 @@ class TwitterStreamListner(tweepy.Stream):
     def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret, rows, columns, **kwargs):
         super().__init__(consumer_key, consumer_secret, access_token, access_token_secret, **kwargs)
         self.grid_worker = LocationCounter(rows, columns)
+        self.accumulator = 0
 
     def on_status(self, status):
         self.process(status)
+        # avoid rate limit
+        self.accumulator += 1
+        if self.accumulator >= THRESHOLD:
+            time.sleep(600)  # sleep for 10 minutes
+            self.accumulator = 0
 
         return True
 
@@ -112,7 +120,7 @@ class TwitterStreamListner(tweepy.Stream):
             return
         # TODO How are we actually going to do this? 
         db = DBS[communicator.Get_rank()]
-        response = requests.post("http://" + USER_NAME + ":" + PASSWORD + "@localhost:5984/" + db, json=data_to_store)
+        response = requests.post("http://" + USER_NAME + ":" + PASSWORD + "@172.17.0.4:5984/" + db, json=data_to_store)
         print("one write operation with {}".format(response.status_code))
         self.grid_worker.work(data_to_store)
 
