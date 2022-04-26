@@ -3,82 +3,30 @@
     <b-row style='padding: 0px; margin: 0px; border: 0px'>
       <b-col xl="9" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
         <div id='map' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 900px;'></div>
+        <button id="update" class="btn-control">Update Live Data</button>
       </b-col>
       <b-col xl="3" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
         <b-list-group style="max-height: 900px; overflow: scroll; padding: 0px; margin: 0px; border: 0px">
-          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
-            <b-modal id="bv-modal-example" hide-footer size="lg">
+          <div v-for="item in geoJson.data.features" :key="item.properties.description">
+            <b-list-group-item variant="light" button @click="$bvModal.show(item.properties.description)">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{item.geometry.coordinates}}</h5>
+                <small>3 days ago</small>
+              </div>
+              <p><strong>{{item.properties.description}}</strong></p>
+              <img v-bind:src="item.properties.img" width="300px" height="150px">
+            </b-list-group-item>
+            <b-modal v-bind:id="item.properties.description" hide-footer size="lg">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">List Group item heading</h5>
                 <small>3 days ago</small>
               </div>
               <p class="mb-1">
-                Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-                Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-                Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-                Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
+                <strong>{{item.properties.description}}</strong>
               </p>
               <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="750px" height="400px">
             </b-modal>
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List Group item heading</h5>
-              <small>3 days ago</small>
-            </div>
-            <p class="mb-1">
-              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-            </p>
-            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
-          </b-list-group-item>
-          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List Group item heading</h5>
-              <small>3 days ago</small>
-            </div>
-            <p class="mb-1">
-              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-            </p>
-            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
-          </b-list-group-item>
-          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List Group item heading</h5>
-              <small>3 days ago</small>
-            </div>
-            <p class="mb-1">
-              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-            </p>
-            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
-          </b-list-group-item>
-          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List Group item heading</h5>
-              <small>3 days ago</small>
-            </div>
-            <p class="mb-1">
-              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-            </p>
-            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
-          </b-list-group-item>
-          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List Group item heading</h5>
-              <small>3 days ago</small>
-            </div>
-            <p class="mb-1">
-              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-            </p>
-            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
-          </b-list-group-item>
-          <b-list-group-item variant="light" button @click="$bvModal.show('bv-modal-example')">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List Group item heading</h5>
-              <small>3 days ago</small>
-            </div>
-            <p class="mb-1">
-              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-            </p>
-            <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="300px" height="150px">
-          </b-list-group-item>
+          </div>
         </b-list-group>
       </b-col>
     </b-row>
@@ -87,125 +35,176 @@
 
 <script>
 import mapboxgl from 'mapbox-gl'
+import axios from 'axios'
 
 export default {
   name: 'View2',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  },
-  mounted () {
-    mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuanVudyIsImEiOiJjbDI5czM2MGIwbTVtM250MzVnZXJ4MTd1In0.8e5pzkNEMkUEe37MkLXT0g'
-    const map = new mapboxgl.Map({
-      container: 'map', // container ID
-      style: 'mapbox://styles/mapbox/light-v10', // style URL
-      center: [144.9695, -37.8227], // starting position [lng, lat]
-      zoom: 12 // starting zoom
-    })
-    let geoJson = {
-      'type': 'geojson',
-      'data': {
-        'type': 'FeatureCollection',
-        'features': [
-          {
-            'type': 'Feature',
-            'properties': {
-              'description':
-                '<strong>abc</strong><img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="200px">'
-            },
-            'geometry': {
-              'type': 'Point',
-              'coordinates': [144.93038, -37.801567]
-            }
-          },
-          {
-            'type': 'Feature',
-            'properties': {
-              'description':
-                '<strong>Mad Men Season Five Finale Watch Party</strong>'
-            },
-            'geometry': {
-              'type': 'Point',
-              'coordinates': [144.94803, -37.811527]
-            }
-          },
-          {
-            'type': 'Feature',
-            'properties': {
-              'description':
-                '<strong>Big Backyard Beach Bash and Wine Fest</strong>'
-            },
-            'geometry': {
-              'type': 'Point',
-              'coordinates': [144.9687, -37.821567]
-            }
-          },
-          {
-            'type': 'Feature',
-            'properties': {
-              'description':
-                '<strong>Ballston Arts & Crafts Market</strong>'
-            },
-            'geometry': {
-              'type': 'Point',
-              'coordinates': [144.9409, -37.831567]
-            }
-          },
-          {
-            'type': 'Feature',
-            'properties': {
-              'description':
-                '<strong>Seersucker Bike Ride and Social</strong>'
-            },
-            'geometry': {
-              'type': 'Point',
-              'coordinates': [144.9229, -37.78507]
-            }
-          }
-        ]
+      msg: 'Welcome to Your Vue.js App',
+      geoJson: {
+        'type': 'geojson',
+        'data': {
+          'type': 'FeatureCollection',
+          'features': []
+        }
       }
     }
-    map.on('load', () => {
-      // Add a layer showing the places.
-      map.addSource('places', geoJson)
-      map.addLayer({
-        'id': 'places',
-        'type': 'circle',
-        'source': 'places',
-        'paint': {
-          'circle-color': '#4264fb',
-          'circle-radius': 6,
-          'circle-stroke-width': 2,
-          'circle-stroke-color': '#ffffff'
+  },
+  created () {
+    this.getReq('', {})
+  },
+  mounted () {
+    setTimeout(() => {
+      mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuanVudyIsImEiOiJjbDI5czM2MGIwbTVtM250MzVnZXJ4MTd1In0.8e5pzkNEMkUEe37MkLXT0g'
+      const mapDiv = document.getElementById('map')
+      const map = new mapboxgl.Map({
+        container: mapDiv,
+        style: 'mapbox://styles/mapbox/light-v10', // style URL
+        center: [144.9695, -37.8227], // starting position [lng, lat]
+        zoom: 12 // starting zoom
+      })
+      map.on('load', () => {
+        map.addSource('places', this.geoJson)
+        map.addLayer({
+          'id': 'places',
+          'type': 'circle',
+          'source': 'places',
+          'paint': {
+            'circle-color': '#4264fb',
+            'circle-radius': 6,
+            'circle-stroke-width': 2,
+            'circle-stroke-color': '#ffffff'
+          }
+        })
+        // Create a popup, but don't add it to the map yet.
+        const popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false
+        })
+        map.on('mouseenter', 'places', (e) => {
+          // Change the cursor style as a UI indicator.
+          map.getCanvas().style.cursor = 'pointer'
+          // Copy coordinates array.
+          const coordinates = e.features[0].geometry.coordinates.slice()
+          const description = e.features[0].properties.description
+          // Ensure that if the map is zoomed out such that multiple
+          // copies of the feature are visible, the popup appears
+          // over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
+          }
+          // Populate the popup and set its coordinates
+          // based on the feature found.
+          popup.setLngLat(coordinates).setHTML(description).addTo(map)
+        })
+        map.on('mouseleave', 'places', () => {
+          map.getCanvas().style.cursor = ''
+          popup.remove()
+        })
+      })
+      document.getElementById('update').addEventListener('click', () => {
+        this.geoJson = {
+          'type': 'geojson',
+          'data': {
+            'type': 'FeatureCollection',
+            'features': []
+          }
         }
-      })
-      // Create a popup, but don't add it to the map yet.
-      const popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false
-      })
-      map.on('mouseenter', 'places', (e) => {
-        // Change the cursor style as a UI indicator.
-        map.getCanvas().style.cursor = 'pointer'
-        // Copy coordinates array.
-        const coordinates = e.features[0].geometry.coordinates.slice()
-        const description = e.features[0].properties.description
-        // Ensure that if the map is zoomed out such that multiple
-        // copies of the feature are visible, the popup appears
-        // over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
+        let newGeo = {
+          'type': 'FeatureCollection',
+          'features': []
         }
-        // Populate the popup and set its coordinates
-        // based on the feature found.
-        popup.setLngLat(coordinates).setHTML(description).addTo(map)
+        map.getSource('places').setData(newGeo)
       })
-      map.on('mouseleave', 'places', () => {
-        map.getCanvas().style.cursor = ''
-        popup.remove()
+    }, 1000)
+  },
+  methods: {
+    getReq: function (url, args) {
+      const that = this
+      axios.get(url, {
+        params: {
+        }
+      }).then(function (resp) {
+        return resp.data
+      }).catch(resp => {
+        console.log('请求失败：' + resp.status + ',' + resp.statusText)
+        const geoJson = {
+          'type': 'geojson',
+          'data': {
+            'type': 'FeatureCollection',
+            'features': [
+              {
+                'type': 'Feature',
+                'properties': {
+                  'description':
+                    '1',
+                  'img':
+                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
+                },
+                'geometry': {
+                  'type': 'Point',
+                  'coordinates': [144.93038, -37.801567]
+                }
+              },
+              {
+                'type': 'Feature',
+                'properties': {
+                  'description':
+                    '2',
+                  'img':
+                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
+                },
+                'geometry': {
+                  'type': 'Point',
+                  'coordinates': [144.94803, -37.811527]
+                }
+              },
+              {
+                'type': 'Feature',
+                'properties': {
+                  'description':
+                    '3',
+                  'img':
+                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
+                },
+                'geometry': {
+                  'type': 'Point',
+                  'coordinates': [144.9687, -37.821567]
+                }
+              },
+              {
+                'type': 'Feature',
+                'properties': {
+                  'description':
+                    '4',
+                  'img':
+                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
+                },
+                'geometry': {
+                  'type': 'Point',
+                  'coordinates': [144.9409, -37.831567]
+                }
+              },
+              {
+                'type': 'Feature',
+                'properties': {
+                  'description':
+                    '5',
+                  'img':
+                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
+                },
+                'geometry': {
+                  'type': 'Point',
+                  'coordinates': [144.9229, -37.78507]
+                }
+              }
+            ]
+          }
+        }
+        that.geoJson = geoJson
       })
-    })
+    }
   }
 }
 </script>
@@ -226,4 +225,26 @@ li {
 a {
   color: #42b983;
 }
+
+.btn-control {
+  font: bold 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  background-color: #4264fb;
+  color: #fff;
+  position: absolute;
+  top: 60px;
+  left: 10%;
+  z-index: 1;
+  border: none;
+  width: 200px;
+  margin-left: -100px;
+  display: block;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 3px;
+}
+
+.btn-control:hover {
+  background-color: #4ea0da;
+}
+
 </style>

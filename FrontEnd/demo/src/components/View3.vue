@@ -1,10 +1,10 @@
 <template>
   <b-container class="bv-example-row" fluid style='padding: 0px; width: 100%; margin: 0px; border: 0px'>
     <b-row style='padding: 0px; margin: 0px; border: 0px'>
-      <b-col xl="10" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
+      <b-col xl="9" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
         <div id='map' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 900px;'></div>
       </b-col>
-      <b-col xl="2" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
+      <b-col xl="3" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
         1 of 3
       </b-col>
     </b-row>
