@@ -88,27 +88,28 @@ class TwitterStreamListener(tweepy.Stream):
     """
     Class for processing streaming twitters
     """
-    def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret, rows, columns, **kwargs):
+    def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret, rows, work_type, columns, **kwargs):
         super().__init__(consumer_key, consumer_secret, access_token, access_token_secret, **kwargs)
         self.grid_worker = LocationCounter(rows, columns)
         self.buffer = []
         self.db_client = db_client.DBClient(USER_NAME, PASSWORD, URL)
         self.sentiment_classifier = sentiment_classification.SentimentClassifier()
+        self.work_type = work_type
 
     def on_status(self, status):
         self.buffer.append(status)
         if len(self.buffer) > THRESHOLD:
             self.process()
-
-        time.sleep(500)
-        # avoid rate limit
-        self.buffer.clear()
+            # avoid rate limit
+            time.sleep(500)
+            self.buffer.clear()
 
         return True
 
     def on_error(self, status_code):
         if status_code == "420":
-            return False
+            time.sleep(100)
+            return True
         print(status_code)
 
     def process(self):
@@ -120,6 +121,8 @@ class TwitterStreamListener(tweepy.Stream):
         for status in self.buffer:
             try:
                 data_to_store = status._json
+                # db_name = {YYYY-MM-DD_topic}
+                self.db_client.put_record()
             except:
                 continue
 
