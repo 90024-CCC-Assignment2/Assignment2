@@ -1,0 +1,60 @@
+{
+  "list": [
+    {
+      "country": "China",
+      "cuisine": ["Chinese food", "Dum Dim", "tea", "tofu", "noodle", "dumpling", "sweet and sour", "kung pao", "Gong Bao", "Wonton", "rice", "sesame", "bun", "general tao", "lo mein", "moo shu", "egg roll", "szechuan", "potsticker", "moo goo", "Peking duck"]
+    },
+    {
+      "country": "Thai",
+      "cuisine": ["Goong Tod Kratiem Prik", "Pad Thai", "Tom Yam Goong", "Yam Taeng", "Khao Man", "Pad Kee Mow", "Thai food", "satay", "Papaya", "krapow gai"]
+    },
+    {
+      "country": "Korea",
+      "cuisine": ["Korean food", "Kalbi", "dak bulgogi", "kimchi", "Kongnamool", "korean bbq", "Tongdak", "bibimbap", "gochugaru", "fried chichen", "Dolsotbap", "Ganjang", "Jokbal"]
+    },
+    {
+      "country": "Japan",
+      "cuisine": ["Japanese food", "Soba", "Onigiri", "Domburi", "sushi", "tuna", "miso", "Okonomiyaki", "katsu", "kushiyaki", "mochi", "sando", "bento", "gyoza", "ramen", "udon", "sake", "oyakodon", "california roll", "rice ball", "tempura", "yakisoba", "sashimi"]
+    },
+    {
+      "country": "Mexican",
+      "cuisine": ["Mexican food", "hominy", "carnitas", "taco", "agua fresca de pepino", "chipotle", "flautas", "salsa", "sope", "jalapeno", "posole", "esquites", "tortillas", "guacamole", "tres leches"]
+    },
+    {
+      "country": "India",
+      "cuisine": ["Indian food", "masala", "Aloo Gobi", "keema aloo", "canai", "chana", "kachumbar", "lentils", "Butter Chicken", "Banjari Gosht", "Biryani", "chutney", "curry", "kashmiri", "naan", "chana", "basmati"]
+    },
+    {
+      "country": "Italy",
+      "cuisine": ["Italian food", "pasta", "torta di mele", "risotto", "meatball", "spaghetti", "minestrone", "saporite", "Focaccia", "Caponata", "Milanese", "piccata", "pesto", "fettuccine", "panna cotta", "lasagna", "polenta", "barolo", "bruschetta", "parmesan"]
+    },
+    {
+      "country": "America Canada",
+      "cuisine": ["American food", "Canadian food", "brats", "sandwich", "pasties", "casserole", "burger", "baked potato", "BBQ Sauce", "Buffalo Chicken ", "Tex-Mex", "grilled salmon", "Caesar salad", "Cheesecake", "Starbucks coffee", "pie"]
+    },
+    {
+      "country": "Spain",
+      "cuisine": ["Spanish food", "Croquettes", "Tapas", "Jamon", "Espanola", "gallega", "Paella", "bean stews"]
+    },
+    {
+      "country": "Turkey",
+      "cuisine": ["Turkish food", "Kebap", "Lahmacun", "Baklava", "Turkish Coffee"]
+    },
+    {
+      "country": "Greece",
+      "cuisine": ["Greek food", "Taramasalata", "Tomatokeftedes", "Pastisada", "Pastisada", "Greek salad"]
+    },
+    {
+      "country": "Pakistan",
+      "cuisine": ["Pakistan food", "Shahi tukra", " tandoori", "Roti", "Dhal", "Raita", "lassi"]
+    },
+    {
+      "country": "Ukraine",
+      "cuisine": ["Ukraine food", "Borsch", "Salo", "Gorilka", "Vareniki", "Zrazi"]
+    },
+    {
+      "country": "Australia",
+      "cuisine": ["Australian food", "Vegemite", "Cheesymite scroll", "Melbourne chicken", "Fairy bread", "Billy tea", "flat white"]
+    }
+  ]
+}

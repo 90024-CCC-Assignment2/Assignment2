@@ -32,11 +32,10 @@ class DBClient:
         self.client.disconnect()
 
     def put_record(self, db_name, record):
-        # if record['_id'] not in self.get_database(db_name):
-        self.get_database(db_name).create_document(record)
-        return True
-            # return True
-        # return False
+        if record['_id'] not in self.get_database(db_name):
+            self.get_database(db_name).create_document(record)
+            return True
+        return False
 
 
 if __name__ == '__main__':
