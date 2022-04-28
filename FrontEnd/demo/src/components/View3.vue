@@ -50,27 +50,27 @@ export default {
         {
           'type': 'Feature',
           'properties': {
-            'mag': 1.5
+            'mag': 3.6
           },
           'geometry': {
             'type': 'Point',
-            'coordinates': [144.995, -37.4227]
+            'coordinates': [144.995, -37.8427]
           }
         },
         {
           'type': 'Feature',
           'properties': {
-            'mag': 4
+            'mag': 2
           },
           'geometry': {
             'type': 'Point',
-            'coordinates': [144.9795, -37.9227]
+            'coordinates': [144.9795, -37.8027]
           }
         },
         {
           'type': 'Feature',
           'properties': {
-            'mag': 7
+            'mag': 6
           },
           'geometry': {
             'type': 'Point',
@@ -100,7 +100,7 @@ export default {
               ['get', 'mag'],
               0,
               0,
-              6,
+              3,
               1
             ],
             // Increase the heatmap color weight weight by zoom level
@@ -111,8 +111,8 @@ export default {
               ['zoom'],
               0,
               1,
-              9,
-              3
+              3,
+              1
             ],
             // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
             // Begin color ramp at 0-stop with a 0-transparancy color

@@ -32,6 +32,6 @@ export default {
 }
 
 #nav {
-  background: whitesmoke;
+  background: #83beff;
 }
 </style>
