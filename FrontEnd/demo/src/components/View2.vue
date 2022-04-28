@@ -1,14 +1,23 @@
 <template>
-  <b-container class="bv-example-row" fluid style='padding: 0px; width: 100%; margin: 0px; border: 0px'>
+  <b-container class="bv-example-row" fluid style='background-color: whitesmoke; padding: 0px; width: 100%; margin: 0px; border: 0px'>
     <b-row style='padding: 0px; margin: 0px; border: 0px'>
       <b-col xl="9" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
-        <div id='map' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 900px;'></div>
+        <div id='map' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 880px;'></div>
         <button id="update" class="btn-control">Update Live Data</button>
       </b-col>
       <b-col xl="3" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
-        <b-list-group style="max-height: 900px; overflow: scroll; padding: 0px; margin: 0px; border: 0px">
+        <div class="mt-3" style="background-color: whitesmoke; padding: 0px; margin: 10px; border: 0px">
+          <b-button-group>
+            <b-button @click="getData('Type1')">Type1</b-button>
+            <b-button @click="getData('Type2')">Type2</b-button>
+            <b-button @click="getData('Type3')">Type3</b-button>
+            <b-button @click="getData('Type4')">Type4</b-button>
+            <b-button @click="getData('Type5')">Type5</b-button>
+          </b-button-group>
+        </div>
+        <b-list-group style="background-color: whitesmoke; max-height: 830px; overflow: scroll; padding: 0px; margin: 0px; border: 0px">
           <div v-for="item in geoJson.data.features" :key="item.properties.description">
-            <b-list-group-item variant="light" button @click="$bvModal.show(item.properties.description)">
+            <b-list-group-item variant="light" button @click="$bvModal.show(item.properties.description)" style="background-color: whitesmoke">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{item.geometry.coordinates}}</h5>
                 <small>3 days ago</small>
@@ -48,7 +57,8 @@ export default {
           'type': 'FeatureCollection',
           'features': []
         }
-      }
+      },
+      map: null
     }
   },
   created () {
@@ -58,15 +68,15 @@ export default {
     setTimeout(() => {
       mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuanVudyIsImEiOiJjbDI5czM2MGIwbTVtM250MzVnZXJ4MTd1In0.8e5pzkNEMkUEe37MkLXT0g'
       const mapDiv = document.getElementById('map')
-      const map = new mapboxgl.Map({
+      this.map = new mapboxgl.Map({
         container: mapDiv,
         style: 'mapbox://styles/mapbox/light-v10', // style URL
         center: [144.9695, -37.8227], // starting position [lng, lat]
         zoom: 12 // starting zoom
       })
-      map.on('load', () => {
-        map.addSource('places', this.geoJson)
-        map.addLayer({
+      this.map.on('load', () => {
+        this.map.addSource('places', this.geoJson)
+        this.map.addLayer({
           'id': 'places',
           'type': 'circle',
           'source': 'places',
@@ -82,9 +92,9 @@ export default {
           closeButton: false,
           closeOnClick: false
         })
-        map.on('mouseenter', 'places', (e) => {
+        this.map.on('mouseenter', 'places', (e) => {
           // Change the cursor style as a UI indicator.
-          map.getCanvas().style.cursor = 'pointer'
+          this.map.getCanvas().style.cursor = 'pointer'
           // Copy coordinates array.
           const coordinates = e.features[0].geometry.coordinates.slice()
           const description = e.features[0].properties.description
@@ -96,10 +106,10 @@ export default {
           }
           // Populate the popup and set its coordinates
           // based on the feature found.
-          popup.setLngLat(coordinates).setHTML(description).addTo(map)
+          popup.setLngLat(coordinates).setHTML(description).addTo(this.map)
         })
-        map.on('mouseleave', 'places', () => {
-          map.getCanvas().style.cursor = ''
+        this.map.on('mouseleave', 'places', () => {
+          this.map.getCanvas().style.cursor = ''
           popup.remove()
         })
       })
@@ -115,11 +125,34 @@ export default {
           'type': 'FeatureCollection',
           'features': []
         }
-        map.getSource('places').setData(newGeo)
+        this.map.getSource('places').setData(newGeo)
       })
     }, 1000)
   },
   methods: {
+    getData: function (type) {
+      const that = this
+      let url = ''
+      axios.get(url, {
+        params: {
+          'type': type
+        }
+      }).then(function (resp) {
+        return resp.data
+      }).catch(resp => {
+        console.log('请求失败：' + resp.status + ',' + resp.statusText)
+        console.log('request type:' + type)
+        const geoJson = {
+          'type': 'geojson',
+          'data': {
+            'type': 'FeatureCollection',
+            'features': []
+          }
+        }
+        that.geoJson = geoJson
+        this.map.getSource('places').setData(that.geoJson.data)
+      })
+    },
     getReq: function (url, args) {
       const that = this
       axios.get(url, {
@@ -145,58 +178,9 @@ export default {
                 'geometry': {
                   'type': 'Point',
                   'coordinates': [144.93038, -37.801567]
-                }
-              },
-              {
-                'type': 'Feature',
-                'properties': {
-                  'description':
-                    '2',
-                  'img':
-                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
                 },
-                'geometry': {
-                  'type': 'Point',
-                  'coordinates': [144.94803, -37.811527]
-                }
-              },
-              {
-                'type': 'Feature',
-                'properties': {
-                  'description':
-                    '3',
-                  'img':
-                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
-                },
-                'geometry': {
-                  'type': 'Point',
-                  'coordinates': [144.9687, -37.821567]
-                }
-              },
-              {
-                'type': 'Feature',
-                'properties': {
-                  'description':
-                    '4',
-                  'img':
-                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
-                },
-                'geometry': {
-                  'type': 'Point',
-                  'coordinates': [144.9409, -37.831567]
-                }
-              },
-              {
-                'type': 'Feature',
-                'properties': {
-                  'description':
-                    '5',
-                  'img':
-                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
-                },
-                'geometry': {
-                  'type': 'Point',
-                  'coordinates': [144.9229, -37.78507]
+                'content': {
+                  'username': '123'
                 }
               }
             ]
