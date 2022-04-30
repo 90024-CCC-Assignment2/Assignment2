@@ -1,11 +1,26 @@
+import dao.TwitterDao;
 import domain.Person;
+import domain.Twitter;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.lightcouch.CouchDbClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 import java.util.UUID;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:applicationContext.xml")
 public class TestCouchDB {
+
+   @Autowired
+   private TestDao testDao;
+//   @Autowired
+//   private CouchDbClient couchDbClient;
+   @Autowired
+   private TwitterDao twitterDao;
    /**
     * Test Retrieve Resource
     */
@@ -80,6 +95,19 @@ public class TestCouchDB {
       System.out.println("Matched Count: "+ list.size());
       list.forEach(ele -> System.out.println(ele));
       couchDbClient.shutdown();
+   }
+
+   @Test
+   public void test1(){
+      //testDao.test();
+      //DesignDocument designDoc = couchDbClient.design().getFromDesk("couchview.js");
+      //System.out.println(designDoc);
+   }
+
+   @Test
+   public void test2(){
+      List<Twitter> china = twitterDao.searchByCountry("china");
+      System.out.println(china);
    }
 
 }
