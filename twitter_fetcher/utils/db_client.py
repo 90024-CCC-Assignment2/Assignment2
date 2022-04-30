@@ -32,14 +32,27 @@ class DBClient:
         self.client.disconnect()
 
     def put_record(self, db_name, record):
+        db_name = str(db_name).lower()
+        self.create_db(db_name)
         if record['_id'] not in self.get_database(db_name):
             self.get_database(db_name).create_document(record)
             return True
         return False
 
+    def create_db(self, db_name):
+        print(db_name)
+        if db_name not in self.client.all_dbs():
+            self.client.create_database(db_name)
+
 
 if __name__ == '__main__':
     client = DBClient('admin', 'password1234', 'http://localhost:5984/')
+    # for i in client.get_database("test"):
+    #     print(i)
+    #
+    # print('1149012336147144705' in client.get_database("test"))
     # session = client.get_session()
 
-    print(client.put_record("students", {'_id': '123321', 'name': 'Haoyu'}))
+    # print(client.put_record("hello", {'_ id': '123321', 'name': 'Haoyu'}))
+    # client.create_db("hello")
+    # print('hello' in client)

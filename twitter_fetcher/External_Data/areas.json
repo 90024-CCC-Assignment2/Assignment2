@@ -1,0 +1,404 @@
+{
+    "type": "areas of Mel",
+    "data": [
+        {
+            "area": "Melbourne",
+            "keywords": [
+                "Melbourne City",
+                "City of Melbourne"
+            ],
+            "geo": {
+                "up": -37.781260,
+                "down": -37.834224,
+                "left": 144.894977,
+                "right": 144.991212
+            }
+        },
+        {
+            "area": "Port Phillip",
+            "keywords": [
+                "Port Phillip",
+                "Kilda"
+            ],
+            "geo": {
+                "up": -37.820693,
+                "down": -37.886799,
+                "left": 144.897658,
+                "right": 145.019489
+            }
+        },
+        {
+            "area": "Stonnington",
+            "keywords": [
+                "Stonnington",
+                "Malvern"
+            ],
+            "geo": {
+                "up": -37.828896,
+                "down": -37.893000,
+                "left": 144.987464,
+                "right": 145.092521
+            }
+        },
+        {
+            "area": "Yarra",
+            "keywords": [
+                "Richmond",
+                "Yarra"
+            ],
+            "geo": {
+                "up": -37.773865,
+                "down": -37.894206,
+                "left": 144.960797,
+                "right": 145.042895
+            }
+        },
+        {
+            "area": "Banyule",
+            "keywords": [
+                "Greensborough",
+                "Banyule"
+            ],
+            "geo": {
+                "up": -37.681972,
+                "down": -37.782212,
+                "left": 145.030834,
+                "right": 145.140182
+            }
+        },
+        {
+            "area": "Bayside",
+            "keywords": [
+                "Bayside",
+                "Sandringham"
+            ],
+            "geo": {
+                "up": -37.883221,
+                "down": -37.995357,
+                "left": 144.981601,
+                "right": 145.054505
+            }
+        },
+        {
+            "area": "Boroondara",
+            "keywords": [
+                "Boroondata",
+                "Camberwell"
+            ],
+            "geo": {
+                "up": -37.778853,
+                "down": -37.875799,
+                "left": 145.000978,
+                "right": 145.102430
+            }
+        },
+        {
+            "area": "Darebin",
+            "keywords": [
+                "Darebin",
+                "Preston"
+            ],
+            "geo": {
+                "up": -37.693644,
+                "down": -37.782290,
+                "left": 144.972745,
+                "right": 145.056001
+            }
+        },
+        {
+            "area": "Glen Eira",
+            "keywords": [
+                "Glen Eira",
+                "Caulfield"
+            ],
+            "geo": {
+                "up": -37.860462,
+                "down": -37.937266,
+                "left": 145.000342,
+                "right": 145.081881
+            }
+        },
+        {
+            "area": "Hobsons Bay",
+            "keywords": [
+                "Hobsons",
+                "Altona"
+            ],
+            "geo": {
+                "up": -37.827104,
+                "down": -37.894596,
+                "left": 144.756527,
+                "right": 144.901066
+            }
+        },
+        {
+            "area": "Kingston",
+            "keywords": [
+                "Kingstion",
+                "Cheletenham"
+            ],
+            "geo": {
+                "up": -37.924674,
+                "down": -38.084284,
+                "left": 145.040051,
+                "right": 145.152318
+            }
+        },
+        {
+            "area": "Manningham",
+            "keywords": [
+                "Manningham",
+                "Doncaster"
+            ],
+            "geo": {
+                "up": -37.713072,
+                "down": -37.801017,
+                "left": 145.087523,
+                "right": 145.276007
+            }
+        },
+        {
+            "area": "Maribyrnong",
+            "keywords": [
+                "Maribyrnong",
+                "Footscray"
+            ],
+            "geo": {
+                "up": -37.757625,
+                "down": -37.787070,
+                "left": 144.872667,
+                "right": 144.904939
+            }
+        },
+        {
+            "area": "Monash",
+            "keywords": [
+                "Monash",
+                "Glen Waverley"
+            ],
+            "geo": {
+                "up": -37.853790,
+                "down": -37.934121,
+                "left": 145.087602,
+                "right": 145.206735
+            }
+        },
+        {
+            "area": "Moonee Valley",
+            "keywords": [
+                "Moonee"
+            ],
+            "geo": {
+                "up": -37.714149,
+                "down": -37.787985,
+                "left": 144.848964,
+                "right": 144.941661
+            }
+        },
+        {
+            "area": "Moreland",
+            "keywords": [
+                "Moreland",
+                "Coburg"
+            ],
+            "geo": {
+                "up": -37.695203,
+                "down": -37.777335,
+                "left": 1454.894023,
+                "right": 144.986033
+            }
+        },
+        {
+            "area": "Whitehorse",
+            "keywords": [
+                "Whitehorse",
+                "Nunawading"
+            ],
+            "geo": {
+                "up": -37.794366,
+                "down": -37.860940,
+                "left": 145.102135,
+                "right": 145.208222
+            }
+        },
+        {
+            "area": "Brimbank",
+            "keywords": [
+                "Brimbank",
+                "Sunshine"
+            ],
+            "geo": {
+                "up": -37.668148,
+                "down": -37.812855,
+                "left": 144.745257,
+                "right": 144.858554
+            }
+        },
+        {
+            "area": "Cardinia",
+            "keywords": [
+                "Cardinia",
+                "Officer"
+            ],
+            "geo": {
+                "up": -38.114072,
+                "down": -38.173879,
+                "left": 145.393953,
+                "right": 145.443563
+            }
+        },
+        {
+            "area": "Casey",
+            "keywords": [
+                "Casey",
+                "Narre Warren"
+            ],
+            "geo": {
+                "up": -37.944221,
+                "down": -38.230114,
+                "left": 145.222485,
+                "right": 145.413373
+            }
+        },
+        {
+            "area": "Frankston",
+            "keywords": [
+                "Frankston"
+            ],
+            "geo": {
+                "up": -38.125089,
+                "down": -38.174159,
+                "left": 145.118934,
+                "right": 145.169059
+            }
+        },
+        {
+            "area": "Greater Dandenong",
+            "keywords": [
+                "Dandenong"
+            ],
+            "geo": {
+                "up": -37.933177,
+                "down": -38.074801,
+                "left": 145.132459,
+                "right": 145.244905
+            }
+        },
+        {
+            "area": "Hume",
+            "keywords": [
+                "Hume",
+                "Broadmeadows"
+            ],
+            "geo": {
+                "up": -37.497478,
+                "down": -37.706920,
+                "left": 144.645815,
+                "right": 144.964419
+            }
+        },
+        {
+            "area": "Knox",
+            "keywords": [
+                "Knox",
+                "Wantirna"
+            ],
+            "geo": {
+                "up": -37.839943,
+                "down": -37.955083,
+                "left": 145.200227,
+                "right": 145.322450
+            }
+        },
+        {
+            "area": "Maroondah",
+            "keywords": [
+                "Maroondah",
+                "Ringwood"
+            ],
+            "geo": {
+                "up": -37.763939,
+                "down": -37.841251,
+                "left": 145.222082,
+                "right": 145.315981
+            }
+        },
+        {
+            "area": "Melton",
+            "keywords": [
+                "Melton"
+            ],
+            "geo": {
+                "up": -37.639266,
+                "down": -37.717522,
+                "left": 144.515770,
+                "right": 144.608467
+            }
+        },
+        {
+            "area": "Mornington Peninsula",
+            "keywords": [
+                "Mornington",
+                "Rosebud"
+            ],
+            "geo": {
+                "up": -38.182364,
+                "down": -38.488288,
+                "left": 144.679096,
+                "right": 145.254505
+            }
+        },
+        {
+            "area": "Nillumbik",
+            "keywords": [
+                "Nillumbik",
+                "Greensborough"
+            ],
+            "geo": {
+                "up": -37.501463,
+                "down": -37.726646,
+                "left": 145.120988,
+                "right": 145.340715
+            }
+        },
+        {
+            "area": "Whitelesea",
+            "keywords": [
+                "Whitelesea",
+                "Morang"
+            ],
+            "geo": {
+                "up": -37.409605,
+                "down": -37.530861,
+                "left": 145.075666,
+                "right": 145.210249
+            }
+        },
+        {
+            "area": "Wyndham",
+            "keywords": [
+                "Wyndham",
+                "Werribee"
+            ],
+            "geo": {
+                "up": -37.791675,
+                "down": -38.002451,
+                "left": 144.459308,
+                "right": 144.814303
+            }
+        },
+        {
+            "area": "Yarra Ranges",
+            "keywords": [
+                "Yarra Ranges",
+                "Lilydale"
+            ],
+            "geo": {
+                "up": -37.543170,
+                "down": -37.985023,
+                "left": 145.330108,
+                "right": 146.160041
+            }
+        }
+    ]
+}

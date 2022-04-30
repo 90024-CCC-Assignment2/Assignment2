@@ -2,7 +2,7 @@ import configparser
 import requests
 import json
 from collections import Counter
-from utils import db_client, sentiment_classification
+from utils import db_client
 from utils.Configuration import *
 from torch.utils.data import Dataset, DataLoader
 
