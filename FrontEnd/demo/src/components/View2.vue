@@ -1,42 +1,44 @@
 <template>
   <b-container class="bv-example-row" fluid style='background-color: whitesmoke; padding: 0px; width: 100%; margin: 0px; border: 0px'>
     <b-row style='padding: 0px; margin: 0px; border: 0px'>
-      <b-col xl="9" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
+      <b-col xl="8" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
         <div id='map' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 880px;'></div>
         <button id="update" class="btn-control">Update Live Data</button>
       </b-col>
-      <b-col xl="3" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
-        <div class="mt-3" style="background-color: whitesmoke; padding: 0px; margin: 10px; border: 0px">
-          <b-button-group>
-            <b-button @click="getData('Type1')">Type1</b-button>
-            <b-button @click="getData('Type2')">Type2</b-button>
-            <b-button @click="getData('Type3')">Type3</b-button>
-            <b-button @click="getData('Type4')">Type4</b-button>
-            <b-button @click="getData('Type5')">Type5</b-button>
-          </b-button-group>
+      <b-col xl="4" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
+        <div class="mt-3" style="background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px">
         </div>
-        <b-list-group style="background-color: whitesmoke; max-height: 830px; overflow: scroll; padding: 0px; margin: 0px; border: 0px">
-          <div v-for="item in geoJson.data.features" :key="item.properties.description">
-            <b-list-group-item variant="light" button @click="$bvModal.show(item.properties.description)" style="background-color: whitesmoke">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{item.geometry.coordinates}}</h5>
-                <small>3 days ago</small>
-              </div>
-              <p><strong>{{item.properties.description}}</strong></p>
-              <img v-bind:src="item.properties.img" width="300px" height="150px">
-            </b-list-group-item>
-            <b-modal v-bind:id="item.properties.description" hide-footer size="lg">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">List Group item heading</h5>
-                <small>3 days ago</small>
-              </div>
-              <p class="mb-1">
-                <strong>{{item.properties.description}}</strong>
-              </p>
-              <img src="https://media.timeout.com/images/105655794/1372/772/image.jpg" width="750px" height="400px">
-            </b-modal>
+        <b-tabs pills card vertical style="background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px; height: 860px">
+          <div v-for="country in countries" :key="country">
+            <b-tab v-bind:title="country" @click="getData(country,'1w')"><b-card-text>
+              <b-list-group style="background-color: whitesmoke; max-height: 830px; overflow: scroll; padding: 0px; margin: 0px; border: 0px">
+                <div v-for="item in geoJson.data.features" :key="item.id">
+                  <b-list-group-item variant="light" button @click="$bvModal.show(item.id)" style="background-color: whitesmoke">
+                    <div class="d-flex w-100 justify-content-between">
+                      <img v-bind:src="item.properties.user.profile_img_url" width="30px" height="30px">
+                      <h5 class="mb-1">{{item.properties.user.username}}</h5>
+                      <small>{{item.created_at}}</small>
+                    </div>
+                    <p></p>
+                    <strong>{{item.properties.content.text}}</strong>
+                    <p></p>
+                    <img v-bind:src="item.properties.content.img_url" width="300px" height="150px">
+                  </b-list-group-item>
+                  <b-modal v-bind:id="item.id" hide-footer size="lg">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1">Twitter Details</h5>
+                      <small>{{item.created_at}}</small>
+                    </div>
+                    <p class="mb-1">
+                      <strong>{{item.properties.content.text}}</strong>
+                    </p>
+                    <img v-bind:src="item.properties.content.img_url" width="750px" height="400px">
+                  </b-modal>
+                </div>
+              </b-list-group>
+            </b-card-text></b-tab>
           </div>
-        </b-list-group>
+        </b-tabs>
       </b-col>
     </b-row>
   </b-container>
@@ -58,7 +60,8 @@ export default {
           'features': []
         }
       },
-      map: null
+      map: null,
+      countries: ['China', 'Thai', 'Korea', 'Japan', 'Mexican', 'India', 'Italy', 'America', 'Spain', 'Turkey', 'Greece', 'Pakistan', 'Ukraine', 'Australia']
     }
   },
   created () {
@@ -97,7 +100,7 @@ export default {
           this.map.getCanvas().style.cursor = 'pointer'
           // Copy coordinates array.
           const coordinates = e.features[0].geometry.coordinates.slice()
-          const description = e.features[0].properties.description
+          const content = e.features[0].properties.content
           // Ensure that if the map is zoomed out such that multiple
           // copies of the feature are visible, the popup appears
           // over the copy being pointed to.
@@ -106,7 +109,8 @@ export default {
           }
           // Populate the popup and set its coordinates
           // based on the feature found.
-          popup.setLngLat(coordinates).setHTML(description).addTo(this.map)
+          const imgUrl = content.split('attitude_label')[0].split(':')[3].split('"')[0]
+          popup.setLngLat(coordinates).setHTML('<img src="https:' + imgUrl + '" width="200px" height="100px">').addTo(this.map)
         })
         this.map.on('mouseleave', 'places', () => {
           this.map.getCanvas().style.cursor = ''
@@ -130,12 +134,13 @@ export default {
     }, 1000)
   },
   methods: {
-    getData: function (type) {
+    getData: function (type, period) {
       const that = this
       let url = ''
       axios.get(url, {
         params: {
-          'type': type
+          'type': type,
+          'period': period
         }
       }).then(function (resp) {
         return resp.data
@@ -168,19 +173,23 @@ export default {
             'type': 'FeatureCollection',
             'features': [
               {
+                'id': '123',
                 'type': 'Feature',
+                'created_at': '2022-04-29 19:07',
                 'properties': {
-                  'description':
-                    '1',
-                  'img':
-                    'https://media.timeout.com/images/105655794/1372/772/image.jpg'
+                  'content': {
+                    'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
+                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg',
+                    'attitude_label': null
+                  },
+                  'user': {
+                    'username': 'mallory',
+                    'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
+                  }
                 },
                 'geometry': {
                   'type': 'Point',
                   'coordinates': [144.93038, -37.801567]
-                },
-                'content': {
-                  'username': '123'
                 }
               }
             ]
