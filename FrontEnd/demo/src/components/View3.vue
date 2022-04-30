@@ -4,15 +4,76 @@
       <b-col xl="8" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
         <div id='map' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 880px;'></div>
       </b-col>
-      <b-col xl="4" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
-        <div class="mt-3" style="background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px">
-        </div>
-        <b-tabs pills card vertical style="background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px; height: 860px">
-          <div v-for="country in countries" :key="country">
-            <b-tab v-bind:title="country" @click="getData(country,'1w')"><b-card-text>
-            </b-card-text></b-tab>
-          </div>
-        </b-tabs>
+      <b-col xl="4" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+        <p></p>
+        <p></p>
+        <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+          <b-col xl="3" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+            <b-form-group v-slot="{ ariaDescribedby }">
+              <b-form-radio-group
+                id="btn-radios"
+                v-model="country"
+                :options="countries"
+                :aria-describedby="ariaDescribedby"
+                name="radio-btn-stacked"
+                buttons
+                stacked
+              ></b-form-radio-group>
+            </b-form-group>
+          </b-col>
+          <b-col xl="9" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+            <h2>Twitter Attitude</h2>
+            <p></p>
+            <img src="https://measuringu.com/wp-content/uploads/2019/04/emojis.jpg" style="width: 200px">
+            <p></p>
+            <b-form-group v-slot="{ ariaDescribedby }">
+              <b-form-radio-group
+                v-bind:id="country"
+                v-model="dataType"
+                :aria-describedby="ariaDescribedby"
+              >
+                <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+                  <b-col xl="6" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+                    <b-form-radio value="RESTful">RESTful</b-form-radio>
+                    <p></p>
+                    <strong>Query data period:</strong>
+                  </b-col>
+                  <b-col xl="6" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+                    <b-form-radio value="Historical">Historical</b-form-radio>
+                    <p></p>
+                    <b-form-select v-model="period" :options="periodOption"></b-form-select>
+                  </b-col>
+                  <p></p>
+                  <b-button variant="primary" @click="getData(country,dataType,period)">Show me the data!</b-button>
+                </b-row>
+                <p></p>
+                <p></p>
+                <b-table striped hover stacked :items="typeData"></b-table>
+              </b-form-radio-group>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+          <b-col xl="2" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+          </b-col>
+          <b-col xl="8" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+            <b-carousel
+              id="carousel-food"
+              style="text-shadow: 0px 0px 2px #000; top: 20px"
+              interval:5000
+              fade
+              indicators
+            >
+              <div v-for="item in imgs" :key="item.id">
+                <b-carousel-slide
+                  v-bind:img-src="item.src"
+                ></b-carousel-slide>
+              </div>
+            </b-carousel>
+          </b-col>
+          <b-col xl="2" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
   </b-container>
@@ -27,6 +88,19 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
+      dataType: 'RESTful',
+      period: '1d',
+      country: 'China',
+      periodOption: [
+        { value: '1d', text: '1 Day' },
+        { value: '3d', text: '3 Day' },
+        { value: '1w', text: '1 Week' },
+        { value: '1m', text: '1 Month' },
+        { value: '1y', text: '1 Year' }
+      ],
+      typeData: [
+        {'Number': null, 'Positive😄': null, 'Negative😠': null, 'Rate': null}
+      ],
       geoJson: {
         'type': 'geojson',
         'data': {
@@ -34,7 +108,12 @@ export default {
           'features': []
         }
       },
-      countries: ['China', 'Thai', 'Korea', 'Japan', 'Mexican', 'India', 'Italy', 'America', 'Spain', 'Turkey', 'Greece', 'Pakistan', 'Ukraine', 'Australia']
+      countries: ['China', 'Thai', 'Korea', 'Japan', 'Mexican', 'India', 'Italy', 'America', 'Spain', 'Turkey', 'Greece', 'Pakistan', 'Ukraine', 'Australia'],
+      imgs: [
+        {id: 1, src: 'https://img-cdn-china-admissions.imgix.net/wp-content/uploads/2020/02/Chinese-food.jpg?auto=format%2Cenhance%2Ccompress'},
+        {id: 2, src: 'https://www.kohinoor-joy.com/wp-content/uploads/2020/01/indo-chinese-food.jpg'},
+        {id: 3, src: 'https://venues.ipaypro.co/media/cuisineImages/Chinesecuisinenearme.jpg'}
+      ]
     }
   },
   created () {
@@ -178,12 +257,14 @@ export default {
     }, 1000)
   },
   methods: {
-    getData: function (type, period) {
+    getData: function (country, type, period) {
+      console.log('Call getData(' + country + ',' + type + ',' + period + ')')
       const that = this
       let url = ''
       axios.get(url, {
         params: {
-          'type': type,
+          'country': country,
+          'dataType': type,
           'period': period
         }
       }).then(function (resp) {
@@ -198,7 +279,9 @@ export default {
             'features': []
           }
         }
+        that.typeData = [{'Number': 1, 'Positive😄': 1, 'Negative😠': 1, 'Rate': 1}]
         that.geoJson = geoJson
+        that.imgs = []
         this.map.getSource('places').setData(that.geoJson.data)
       })
     },

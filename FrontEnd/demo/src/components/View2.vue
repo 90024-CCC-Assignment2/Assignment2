@@ -3,42 +3,43 @@
     <b-row style='padding: 0px; margin: 0px; border: 0px'>
       <b-col xl="8" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
         <div id='map' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 880px;'></div>
-        <button id="update" class="btn-control">Update Live Data</button>
       </b-col>
       <b-col xl="4" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
-        <div class="mt-3" style="background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px">
-        </div>
-        <b-tabs pills card vertical style="background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px; height: 860px">
-          <div v-for="country in countries" :key="country">
-            <b-tab v-bind:title="country" @click="getData(country,'1w')"><b-card-text>
-              <b-list-group style="background-color: whitesmoke; max-height: 830px; overflow: scroll; padding: 0px; margin: 0px; border: 0px">
-                <div v-for="item in geoJson.data.features" :key="item.id">
-                  <b-list-group-item variant="light" button @click="$bvModal.show(item.id)" style="background-color: whitesmoke">
-                    <div class="d-flex w-100 justify-content-between">
-                      <img v-bind:src="item.properties.user.profile_img_url" width="30px" height="30px">
-                      <h5 class="mb-1">{{item.properties.user.username}}</h5>
-                      <small>{{item.created_at}}</small>
-                    </div>
-                    <p></p>
+        <p></p>
+        <b-row style='padding: 0px; margin: 0px; border: 0px'>
+          <b-col xl="3" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
+            <b-button-group vertical>
+              <b-button variant="primary" v-for="country in countries" :key="country">{{country}}</b-button>
+            </b-button-group>
+          </b-col>
+          <b-col xl="9" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
+            <b-list-group style="background-color: whitesmoke; max-height: 830px; overflow: scroll; padding: 0px; margin: 0px; border: 0px">
+              <div v-for="item in geoJson.data.features" :key="item.id">
+                <b-list-group-item variant="light" button @click="$bvModal.show(item.id)" style="background-color: whitesmoke">
+                  <div class="d-flex w-100 justify-content-between">
+                    <img v-bind:src="item.properties.user.profile_img_url" width="30px" height="30px">
+                    <h5 class="mb-1">{{item.properties.user.username}}</h5>
+                    <small>{{item.created_at}}</small>
+                  </div>
+                  <p></p>
+                  <strong>{{item.properties.content.text}}</strong>
+                  <p></p>
+                  <img v-bind:src="item.properties.content.img_url" width="300px" height="150px">
+                </b-list-group-item>
+                <b-modal v-bind:id="item.id" hide-footer size="lg">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Twitter Details</h5>
+                    <small>{{item.created_at}}</small>
+                  </div>
+                  <p class="mb-1">
                     <strong>{{item.properties.content.text}}</strong>
-                    <p></p>
-                    <img v-bind:src="item.properties.content.img_url" width="300px" height="150px">
-                  </b-list-group-item>
-                  <b-modal v-bind:id="item.id" hide-footer size="lg">
-                    <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1">Twitter Details</h5>
-                      <small>{{item.created_at}}</small>
-                    </div>
-                    <p class="mb-1">
-                      <strong>{{item.properties.content.text}}</strong>
-                    </p>
-                    <img v-bind:src="item.properties.content.img_url" width="750px" height="400px">
-                  </b-modal>
-                </div>
-              </b-list-group>
-            </b-card-text></b-tab>
-          </div>
-        </b-tabs>
+                  </p>
+                  <img v-bind:src="item.properties.content.img_url" width="750px" height="400px">
+                </b-modal>
+              </div>
+            </b-list-group>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
   </b-container>
@@ -134,24 +135,45 @@ export default {
     }, 1000)
   },
   methods: {
-    getData: function (type, period) {
+    getData: function (country) {
       const that = this
       let url = ''
       axios.get(url, {
         params: {
-          'type': type,
-          'period': period
+          'country': country,
+          'dataType': null,
+          'period': null
         }
       }).then(function (resp) {
         return resp.data
       }).catch(resp => {
         console.log('请求失败：' + resp.status + ',' + resp.statusText)
-        console.log('request type:' + type)
         const geoJson = {
           'type': 'geojson',
           'data': {
             'type': 'FeatureCollection',
-            'features': []
+            'features': [
+              {
+                'id': '123',
+                'type': 'Feature',
+                'created_at': '2022-04-29 19:07',
+                'properties': {
+                  'content': {
+                    'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
+                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg',
+                    'attitude_label': null
+                  },
+                  'user': {
+                    'username': 'mallory',
+                    'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
+                  }
+                },
+                'geometry': {
+                  'type': 'Point',
+                  'coordinates': [144.93038, -37.801567]
+                }
+              }
+            ]
           }
         }
         that.geoJson = geoJson
@@ -217,27 +239,6 @@ li {
 }
 a {
   color: #42b983;
-}
-
-.btn-control {
-  font: bold 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  background-color: #4264fb;
-  color: #fff;
-  position: absolute;
-  top: 60px;
-  left: 10%;
-  z-index: 1;
-  border: none;
-  width: 200px;
-  margin-left: -100px;
-  display: block;
-  cursor: pointer;
-  padding: 10px 20px;
-  border-radius: 3px;
-}
-
-.btn-control:hover {
-  background-color: #4ea0da;
 }
 
 </style>
