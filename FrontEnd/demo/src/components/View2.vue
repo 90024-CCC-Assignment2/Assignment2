@@ -1,43 +1,77 @@
 <template>
-  <b-container class="bv-example-row" fluid style='background-color: whitesmoke; padding: 0px; width: 100%; margin: 0px; border: 0px'>
+  <b-container class="bv-example-row" fluid style='padding: 0px; width: 100%; margin: 0px; border: 0px'>
     <b-row style='padding: 0px; margin: 0px; border: 0px'>
       <b-col xl="8" style='background-color: azure; padding: 0px; margin: 0px; border: 0px'>
         <div id='map' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 880px;'></div>
       </b-col>
-      <b-col xl="4" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
+      <b-col xl="4" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
         <p></p>
-        <b-row style='padding: 0px; margin: 0px; border: 0px'>
-          <b-col xl="3" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
-            <b-button-group vertical>
-              <b-button variant="primary" v-for="country in countries" :key="country">{{country}}</b-button>
-            </b-button-group>
+        <p></p>
+        <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+          <b-col xl="3" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+            <b-form-group v-slot="{ ariaDescribedby }">
+              <b-form-radio-group
+                id="btn-radios"
+                v-model="country"
+                :options="countries"
+                :aria-describedby="ariaDescribedby"
+                name="radio-btn-stacked"
+                buttons
+                stacked
+              ></b-form-radio-group>
+            </b-form-group>
           </b-col>
-          <b-col xl="9" style='background-color: whitesmoke; padding: 0px; margin: 0px; border: 0px'>
-            <b-list-group style="background-color: whitesmoke; max-height: 830px; overflow: scroll; padding: 0px; margin: 0px; border: 0px">
-              <div v-for="item in geoJson.data.features" :key="item.id">
-                <b-list-group-item variant="light" button @click="$bvModal.show(item.id)" style="background-color: whitesmoke">
-                  <div class="d-flex w-100 justify-content-between">
-                    <img v-bind:src="item.properties.user.profile_img_url" width="30px" height="30px">
-                    <h5 class="mb-1">{{item.properties.user.username}}</h5>
-                    <small>{{item.created_at}}</small>
-                  </div>
+          <b-col xl="9" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+            <h2>Twitter Attitude</h2>
+            <p></p>
+            <img src="https://measuringu.com/wp-content/uploads/2019/04/emojis.jpg" style="width: 200px">
+            <p></p>
+            <b-form-group v-slot="{ ariaDescribedby }">
+              <b-form-radio-group
+                v-bind:id="country"
+                v-model="dataType"
+                :aria-describedby="ariaDescribedby"
+              >
+                <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+                  <b-col xl="6" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+                    <b-form-radio value="RESTful">RESTful</b-form-radio>
+                    <p></p>
+                    <strong>Query data period:</strong>
+                  </b-col>
+                  <b-col xl="6" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+                    <b-form-radio value="Historical">Historical</b-form-radio>
+                    <p></p>
+                    <b-form-select v-model="period" :options="periodOption"></b-form-select>
+                  </b-col>
                   <p></p>
-                  <strong>{{item.properties.content.text}}</strong>
-                  <p></p>
-                  <img v-bind:src="item.properties.content.img_url" width="300px" height="150px">
-                </b-list-group-item>
-                <b-modal v-bind:id="item.id" hide-footer size="lg">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Twitter Details</h5>
-                    <small>{{item.created_at}}</small>
-                  </div>
-                  <p class="mb-1">
-                    <strong>{{item.properties.content.text}}</strong>
-                  </p>
-                  <img v-bind:src="item.properties.content.img_url" width="750px" height="400px">
-                </b-modal>
+                  <b-button variant="primary" @click="getData(country,dataType,period)">Show me the data!</b-button>
+                </b-row>
+                <p></p>
+                <p></p>
+                <b-table striped hover stacked :items="typeData"></b-table>
+              </b-form-radio-group>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+          <b-col xl="2" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+          </b-col>
+          <b-col xl="8" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
+            <b-carousel
+              id="carousel-food"
+              style="text-shadow: 0px 0px 2px #000; top: 20px"
+              interval:5000
+              fade
+              indicators
+            >
+              <div v-for="item in imgs" :key="item.id">
+                <b-carousel-slide
+                  v-bind:img-src="item.src"
+                ></b-carousel-slide>
               </div>
-            </b-list-group>
+            </b-carousel>
+          </b-col>
+          <b-col xl="2" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
           </b-col>
         </b-row>
       </b-col>
@@ -54,6 +88,20 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
+      dataType: 'RESTful',
+      period: '1w',
+      country: 'China',
+      periodOption: [
+        { value: '1w', text: '1 Week' },
+        { value: '1m', text: '1 Month' },
+        { value: '3m', text: '3 Month' },
+        { value: '6m', text: '6 Month' },
+        { value: '1y', text: '1 Year' },
+        { value: '2y', text: '2 Year' }
+      ],
+      typeData: [
+        {'Number': null, 'Positive😄': null, 'Negative😠': null, 'Rate': null}
+      ],
       geoJson: {
         'type': 'geojson',
         'data': {
@@ -61,93 +109,78 @@ export default {
           'features': []
         }
       },
-      map: null,
-      countries: ['China', 'Thai', 'Korea', 'Japan', 'Mexican', 'India', 'Italy', 'America', 'Spain', 'Turkey', 'Greece', 'Pakistan', 'Ukraine', 'Australia']
+      countries: ['China', 'Thai', 'Korea', 'Japan', 'Mexican', 'India', 'Italy', 'America', 'Spain', 'Turkey', 'Greece', 'Pakistan', 'Ukraine', 'Australia'],
+      imgs: [],
+      map: null
     }
   },
   created () {
-    this.getReq('', {})
   },
   mounted () {
     setTimeout(() => {
       mapboxgl.accessToken = 'pk.eyJ1Ijoid2VuanVudyIsImEiOiJjbDI5czM2MGIwbTVtM250MzVnZXJ4MTd1In0.8e5pzkNEMkUEe37MkLXT0g'
-      const mapDiv = document.getElementById('map')
       this.map = new mapboxgl.Map({
-        container: mapDiv,
-        style: 'mapbox://styles/mapbox/light-v10', // style URL
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/dark-v10', // style URL
         center: [144.9695, -37.8227], // starting position [lng, lat]
-        zoom: 12 // starting zoom
+        zoom: 10 // starting zoom
       })
       this.map.on('load', () => {
-        this.map.addSource('places', this.geoJson)
-        this.map.addLayer({
-          'id': 'places',
-          'type': 'circle',
-          'source': 'places',
-          'paint': {
-            'circle-color': '#4264fb',
-            'circle-radius': 6,
-            'circle-stroke-width': 2,
-            'circle-stroke-color': '#ffffff'
-          }
-        })
-        // Create a popup, but don't add it to the map yet.
-        const popup = new mapboxgl.Popup({
-          closeButton: false,
-          closeOnClick: false
-        })
-        this.map.on('mouseenter', 'places', (e) => {
-          // Change the cursor style as a UI indicator.
-          this.map.getCanvas().style.cursor = 'pointer'
-          // Copy coordinates array.
-          const coordinates = e.features[0].geometry.coordinates.slice()
-          const content = e.features[0].properties.content
-          // Ensure that if the map is zoomed out such that multiple
-          // copies of the feature are visible, the popup appears
-          // over the copy being pointed to.
-          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
-          }
-          // Populate the popup and set its coordinates
-          // based on the feature found.
-          const imgUrl = content.split('attitude_label')[0].split(':')[3].split('"')[0]
-          popup.setLngLat(coordinates).setHTML('<img src="https:' + imgUrl + '" width="200px" height="100px">').addTo(this.map)
-        })
-        this.map.on('mouseleave', 'places', () => {
-          this.map.getCanvas().style.cursor = ''
-          popup.remove()
-        })
-      })
-      document.getElementById('update').addEventListener('click', () => {
-        this.geoJson = {
-          'type': 'geojson',
-          'data': {
-            'type': 'FeatureCollection',
-            'features': []
-          }
-        }
-        let newGeo = {
-          'type': 'FeatureCollection',
-          'features': []
-        }
-        this.map.getSource('places').setData(newGeo)
+        // Add a geojson point source.
+        // Heatmap layers also work with a vector tile source.
+        this.map.addSource('points', this.geoJson)
+
+        this.map.addLayer(
+          {
+            'id': 'point',
+            'type': 'circle',
+            'source': 'points',
+            'minzoom': 7,
+            'paint': {
+              'circle-radius': 10,
+              'circle-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'attitude_label'],
+                0,
+                'rgb(103,169,207)',
+                1,
+                'rgb(178,24,43)'
+              ],
+              'circle-stroke-color': 'white',
+              'circle-stroke-width': 1,
+              'circle-opacity': [
+                'interpolate',
+                ['linear'],
+                ['zoom'],
+                7,
+                0,
+                8,
+                1
+              ]
+            }
+          },
+          'waterway-label'
+        )
       })
     }, 1000)
   },
   methods: {
-    getData: function (country) {
+    getData: function (country, type, period) {
+      console.log('Call getData(' + country + ',' + type + ',' + period + ')')
       const that = this
-      let url = ''
+      let url = 'https://localhost:8080/testcontroller/test3'
       axios.get(url, {
         params: {
           'country': country,
-          'dataType': null,
-          'period': null
+          'dataType': type,
+          'period': period
         }
       }).then(function (resp) {
         return resp.data
       }).catch(resp => {
         console.log('请求失败：' + resp.status + ',' + resp.statusText)
+        console.log('request type:' + type)
         const geoJson = {
           'type': 'geojson',
           'data': {
@@ -160,64 +193,90 @@ export default {
                 'properties': {
                   'content': {
                     'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
-                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg',
-                    'attitude_label': null
+                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg'
                   },
                   'user': {
                     'username': 'mallory',
                     'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
-                  }
+                  },
+                  'attitude_label': 0
                 },
                 'geometry': {
                   'type': 'Point',
-                  'coordinates': [144.93038, -37.801567]
+                  'coordinates': [144.9695, -37.8227]
                 }
-              }
-            ]
-          }
-        }
-        that.geoJson = geoJson
-        this.map.getSource('places').setData(that.geoJson.data)
-      })
-    },
-    getReq: function (url, args) {
-      const that = this
-      axios.get(url, {
-        params: {
-        }
-      }).then(function (resp) {
-        return resp.data
-      }).catch(resp => {
-        console.log('请求失败：' + resp.status + ',' + resp.statusText)
-        const geoJson = {
-          'type': 'geojson',
-          'data': {
-            'type': 'FeatureCollection',
-            'features': [
+              },
               {
-                'id': '123',
+                'id': '1234',
                 'type': 'Feature',
                 'created_at': '2022-04-29 19:07',
                 'properties': {
                   'content': {
                     'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
-                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg',
-                    'attitude_label': null
+                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg'
                   },
                   'user': {
                     'username': 'mallory',
                     'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
-                  }
+                  },
+                  'attitude_label': 0
                 },
                 'geometry': {
                   'type': 'Point',
-                  'coordinates': [144.93038, -37.801567]
+                  'coordinates': [144.995, -37.8427]
+                }
+              },
+              {
+                'id': '12345',
+                'type': 'Feature',
+                'created_at': '2022-04-29 19:07',
+                'properties': {
+                  'content': {
+                    'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
+                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg'
+                  },
+                  'user': {
+                    'username': 'mallory',
+                    'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
+                  },
+                  'attitude_label': 1
+                },
+                'geometry': {
+                  'type': 'Point',
+                  'coordinates': [144.9795, -37.8027]
+                }
+              },
+              {
+                'id': '123456',
+                'type': 'Feature',
+                'created_at': '2022-04-29 19:07',
+                'properties': {
+                  'content': {
+                    'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
+                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg'
+                  },
+                  'user': {
+                    'username': 'mallory',
+                    'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
+                  },
+                  'attitude_label': 1
+                },
+                'geometry': {
+                  'type': 'Point',
+                  'coordinates': [144.9395, -37.8128]
                 }
               }
             ]
           }
         }
+        that.typeData = [{'Number': 4, 'Positive😄': 2, 'Negative😠': 2, 'Rate': '50%'}]
         that.geoJson = geoJson
+        that.imgs = [
+          {id: 1, src: 'https://img-cdn-china-admissions.imgix.net/wp-content/uploads/2020/02/Chinese-food.jpg?auto=format%2Cenhance%2Ccompress'},
+          {id: 2, src: 'https://www.kohinoor-joy.com/wp-content/uploads/2020/01/indo-chinese-food.jpg'},
+          {id: 3, src: 'https://venues.ipaypro.co/media/cuisineImages/Chinesecuisinenearme.jpg'}
+        ]
+        that.map.getSource('points').setData(that.geoJson.data)
       })
     }
   }
@@ -240,5 +299,4 @@ li {
 a {
   color: #42b983;
 }
-
 </style>

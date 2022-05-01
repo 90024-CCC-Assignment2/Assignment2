@@ -84,7 +84,7 @@ import mapboxgl from 'mapbox-gl'
 import axios from 'axios'
 
 export default {
-  name: 'View3',
+  name: 'View1',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
@@ -117,7 +117,7 @@ export default {
     }
   },
   created () {
-    this.getReq('', {})
+    this.getReq('china')
   },
   mounted () {
     setTimeout(() => {
@@ -285,12 +285,17 @@ export default {
         this.map.getSource('places').setData(that.geoJson.data)
       })
     },
-    getReq: function (url, args) {
+    getReq: function (country, type, period) {
       const that = this
+      let url = 'http://localhost:8080/testcontroller/test3'
       axios.get(url, {
         params: {
+          'country': country,
+          'dataType': type,
+          'period': period
         }
       }).then(function (resp) {
+        console.log(resp.data)
         return resp.data
       }).catch(resp => {
         console.log('请求失败：' + resp.status + ',' + resp.statusText)
