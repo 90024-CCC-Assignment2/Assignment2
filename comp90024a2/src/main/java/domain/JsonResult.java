@@ -12,19 +12,19 @@ import lombok.*;
  * if the request fails (JsonResult.type=ture) JsonResult.msg is an error message
  */
 public class JsonResult<T> {
-    private boolean type;
+    private boolean flag;
     private T data;
     private String msg;
     public static<T> JsonResult success(T data){
         JsonResult js = new JsonResult();
         js.data = data;
-        js.type = true;
+        js.flag = true;
         return js;
     }
     public static<T> JsonResult error(String msg){
         JsonResult js = new JsonResult();
         js.msg = msg;
-        js.type = false;
+        js.flag = false;
         return js;
     }
 }

@@ -15,8 +15,8 @@ import java.util.UUID;
 @ContextConfiguration("classpath:applicationContext.xml")
 public class TestCouchDB {
 
-   @Autowired
-   private TestDao testDao;
+  // @Autowired
+  // private TestDao testDao;
 //   @Autowired
 //   private CouchDbClient couchDbClient;
    @Autowired

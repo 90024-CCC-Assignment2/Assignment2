@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TwitterService {
+public class StreamingTwitterService {
     @Autowired
     private TwitterDao twitterDao;
 

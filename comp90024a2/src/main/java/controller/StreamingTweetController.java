@@ -1,25 +1,21 @@
 package controller;
 
-import domain.Data;
-import domain.Feature;
-import domain.JsonResult;
-import domain.Person;
+import domain.*;
 import org.lightcouch.CouchDbClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import service.TwitterService;
+import org.springframework.web.bind.annotation.*;
+import service.StreamingTwitterService;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/testcontroller")
-public class TestController {
+@RequestMapping("/streamingtwitter")
+@CrossOrigin(origins = "*")
+public class StreamingTweetController {
     @Autowired
-    private TwitterService twitterService;
+    private StreamingTwitterService twitterService;
 
     @RequestMapping("/test2")
     public String test2(Model model){
@@ -33,13 +29,19 @@ public class TestController {
         return "/WEB-INF/views/test/testview.jsp";
     }
 
-    @RequestMapping(path = "/test3", method = RequestMethod.GET)
+    /**
+     * Request all streaming tweets by the given country
+     * @param country
+     * @return
+     */
+    @RequestMapping(path = "/country", method = RequestMethod.GET)
     @ResponseBody
     public JsonResult test(String country){
         List<Feature> features = twitterService.searchByCountry(country);
         Data data = new Data();
         data.setFeatures(features);
-        JsonResult success = JsonResult.success(data);
+        RequestedJson geojson = new RequestedJson("geojson", data);
+        JsonResult success = JsonResult.success(geojson);
         return success;
     }
 }
