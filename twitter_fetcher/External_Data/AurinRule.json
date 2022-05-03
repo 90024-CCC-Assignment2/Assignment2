@@ -1,0 +1,24 @@
+{
+  "list": [
+    {
+      "name": "Eastern Asia",
+      "bow" : ["panda", "dragon", "bubble", "don", "ramen", "noodle", "sushi", "xing", "rice", "pot", "japanese", "korean", "chinese", "shanghai", "peking", "szechuan", "sake", "asian"]
+    },
+    {
+      "name": "Southern Asia",
+      "bow" : ["curry", "masala", "buddha", "indians", "indian", "spice", "dhaka", "thai", "hanoi"]
+    },
+    {
+      "name": "Australia",
+      "bow" : ["cafe", "coffee", "grilled", "bread", "brunch", "sally", "hotel", "pancake", "caffe", "bagels", "vegan", "organic","vegetarian"]
+    },
+    {
+      "name" : "America and Mexican",
+      "bow" : ["mcdonalds", "bbq", "barbecue", "kfc", "burger", "fridays", "el", "hungry", "subway", "chips"]
+    },
+    {
+      "name": "Europe",
+      "bow" : ["garden", "pizza", "domino", "espresso", "de", "italian", "boulangrie", "irish"]
+    }
+  ]
+}
