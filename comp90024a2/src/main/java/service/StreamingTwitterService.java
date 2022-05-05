@@ -14,17 +14,18 @@ public class StreamingTwitterService {
     private TwitterDao twitterDao;
 
     public List<Feature> searchByCountry(String country) {
-        List<Twitter> twitters = twitterDao.searchByCountry(country);
+        List<Tweet> tweets = twitterDao.searchByCountry(country);
         ArrayList<Feature> features = new ArrayList<>();
-        for (Twitter twitter : twitters) {
+        for (Tweet tweet : tweets) {
             Feature feature = new Feature();
-            feature.setId(twitter.getId());
-            feature.setType(twitter.getCountry());
-            feature.setCreated_at(twitter.getCreated_at());
-            feature.setProperties(new Properties(new Content(twitter.getText(),
-                    twitter.getPictures()),new User(twitter.getUser_name(),
-                    twitter.getUser_avatar()), twitter.getTag()));
-            feature.setGeometry(new Geometry("Point",twitter.getCoordinates()));
+            feature.setId(tweet.getId());
+            feature.setType(tweet.getCountry());
+            feature.setCreated_at(tweet.getCreated_at());
+            feature.setProperties(new Properties(new Content(tweet.getText(),
+                    tweet.getPictures()),new User(tweet.getUser_name(),
+                    tweet.getUser_avatar()), tweet.getTag()));
+            feature.setGeometry(new Geometry(tweet.getCoordinates().getType(),
+                    tweet.getCoordinates().getCoordinates()));
             features.add(feature);
         }
         return features;

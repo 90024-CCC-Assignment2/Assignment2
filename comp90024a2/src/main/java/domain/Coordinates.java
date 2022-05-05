@@ -9,7 +9,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Geometry {
-    private String type = "Point";
+public class Coordinates {
+    private String type;
     private List<Double> coordinates;
 }
