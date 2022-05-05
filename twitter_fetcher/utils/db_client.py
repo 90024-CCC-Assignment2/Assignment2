@@ -40,7 +40,7 @@ class DBClient:
         return False
 
     def create_db(self, db_name):
-        print(db_name)
+        # print(db_name)
         if db_name not in self.client.all_dbs():
             self.client.create_database(db_name)
 

@@ -1,5 +1,6 @@
 import json
 import random
+from datetime import datetime
 
 
 class TweetAttributeFilter:
@@ -8,8 +9,12 @@ class TweetAttributeFilter:
         new_json = dict()
         new_json['_id'] = str(raw_json['_id'])
         new_json['text'] = str(raw_json['text'])
-        new_json['created_at'] = str(raw_json['created_at'])
-        new_json['user_name'] = str(raw_json['user']['id'])
+        try:
+            new_json['created_at'] = str(datetime.strptime(raw_json['created_at'], '%a %b %d %H:%M:%S %z %Y'))
+        except:
+            new_json['created_at'] = str(datetime.strptime(raw_json['created_at'], ''))
+        # new_json['created_at'] = datetime.strptime(raw_json['created_at'], ""))
+        new_json['user_name'] = str(raw_json['user']['screen_name'])
         new_json['user_avatar'] = str(raw_json['user']['profile_image_url'])
         if raw_json['coordinates'] is not None:
             new_json['coordinates'] = raw_json['coordinates']
@@ -23,9 +28,9 @@ class TweetAttributeFilter:
             new_json['coordinates'] = {"type": "Point", "coordinates": (lat, longi)}
             ############################################################
         try:
-            new_json['pictures'] = [media['media_url'] for media in raw_json['extended_tweet']['extended_entities']['media']]
+            new_json['pictures'] = raw_json['extended_tweet']['extended_entities']['media'][0]
         except:
-            new_json['pictures'] = None
+            new_json['pictures'] = ""
         new_json['country'] = country
         new_json['tag'] = tag
 

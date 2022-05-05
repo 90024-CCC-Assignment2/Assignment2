@@ -93,7 +93,6 @@ class TwitterStreamListener(tweepy.Stream):
         self.grid_worker = LocationCounter(rows, columns)
         self.buffer = []
         self.db_client = db_client.DBClient(USER_NAME, PASSWORD, URL)
-        self.sentiment_classifier = sentiment_classification.SentimentClassifier()
         self.work_type = work_type
 
     def on_status(self, status):
@@ -127,10 +126,10 @@ class TwitterStreamListener(tweepy.Stream):
                 continue
 
         # TODO How are we actually going to do this? 
-        db = DBS[communicator.Get_rank()]
-        response = requests.post("http://" + USER_NAME + ":" + PASSWORD + "@172.17.0.4:5984/" + db, json=data_to_store)
-        print("one write operation with {}".format(response.status_code))
-        self.grid_worker.work(data_to_store)
+        # db = DBS[communicator.Get_rank()]
+        # response = requests.post("http://" + USER_NAME + ":" + PASSWORD + "@172.17.0.4:5984/" + db, json=data_to_store)
+        # print("one write operation with {}".format(response.status_code))
+        # self.grid_worker.work(data_to_store)
 
 
 class LocationCounter:

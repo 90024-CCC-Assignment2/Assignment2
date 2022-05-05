@@ -8,7 +8,13 @@ import time
 from datetime import datetime
 
 
-def process(client, tweet, Areas):
+BAD_WORDS = set()
+with open("External_Data/negative_words.txt") as f:
+    for line in f.readlines():
+        BAD_WORDS.add(line.strip())
+
+
+def process(client, tweet, Areas, db='Restful'):
     with open("./External_Data/Cuisine.json") as f_cuisine:
         json_cuisine = json.load(f_cuisine)
         Cuisines = json_cuisine['list']
@@ -23,12 +29,18 @@ def process(client, tweet, Areas):
                 if token in cuisines:
                     flag = True
             if flag:
+                Tag = 1
                 # 6 Tag based on Classification
                 # 1 is like , 0 is dislike
-                Tag = 1
+                # print(len(BAD_WORDS))
+                for token in tokens:
+                    if token in BAD_WORDS:
+                        Tag = 0
+                        break
+
 
                 # 7 Put in database
-                client.put_record(country, TweetAttributeFilter().to_db_json(tweet, country, Tag, Areas))
+                client.put_record(db, TweetAttributeFilter().to_db_json(tweet, country, Tag, Areas))
                 break
 
 # ==================================KEY==================================
@@ -37,8 +49,6 @@ api_key_secret = "O91ujNgwI0PjxVIM4mRjZNrYDbAI6TxdeAxkYEodMpplXafPp9"
 bearer_token = "AAAAAAAAAAAAAAAAAAAAAL6ebwEAAAAAUgjIxZ1LxDR9GOQAamnqDUSZvvY%3DnTjGukeZWaysdNDSOm3vHXwCbnupkVOqDQ17zyNP6bj1NEJEGl"
 access_token = "1518824432869208065-LveG04DpyB9iFqllV8ETa5h8m0g0Ay"
 access_token_secret = "gBREHjjrGNejrAFw10x5fp8GUcxGs03P3yLm1XOyRE2zn"
-
-
 
 
 def main():
@@ -83,7 +93,7 @@ def main():
 
             for status in response:
                 tweet = status._json
-                if int(tweet['tweeted_at'].split(' ')[-1]) < 2020:
+                if int(tweet['created_at'].split(' ')[-1]) < 2020:
                     continue
                 # 5 Manual filter
                 # tweet is filtered by cuisine types, e.g. dumpling

@@ -2,6 +2,7 @@ import json
 from utils.db_client import DBClient
 from TweepyClientCrawlCelebrity import process
 
+
 def main():
     db_client = DBClient('admin', 'password1234', 'http://localhost:5984/')
     with open("External_Data/areas.json") as f_areas:
@@ -16,7 +17,7 @@ def main():
                 print("finish")
                 break
             try:
-                process(db_client, tweet, Areas)
+                process(db_client, tweet, Areas, db='Historical')
             except Exception as e:
                 print(e)
                 continue
