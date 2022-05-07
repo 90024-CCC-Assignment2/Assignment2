@@ -11,7 +11,7 @@ import service.StreamingTwitterService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/streamingtwitter")
+@RequestMapping("/streamingtweet")
 @CrossOrigin(origins = "*")
 public class StreamingTweetController {
     @Autowired

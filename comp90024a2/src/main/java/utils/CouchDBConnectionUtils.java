@@ -4,11 +4,10 @@ import org.lightcouch.CouchDbClient;
 
 public class CouchDBConnectionUtils {
 
-    public static CouchDbClient getConn(String country) {
-        CouchDbClient dbClient = new CouchDbClient(country, false, "http", "127.0.0.1", 5984,
+    public static CouchDbClient getConn(String dbName) {
+        CouchDbClient conn = new CouchDbClient(dbName, false, "http", "127.0.0.1", 5984,
                 "admin", "123456");
-
-        return dbClient;
+        return conn;
     }
 
     public static void closeConn(CouchDbClient conn) {

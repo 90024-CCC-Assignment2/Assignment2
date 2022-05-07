@@ -1,6 +1,7 @@
 import dao.TwitterDao;
+import dao.impl.HistoricalTweetDaoImpl;
 import domain.Person;
-import domain.Twitter;
+import domain.Tweet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightcouch.CouchDbClient;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -103,11 +106,67 @@ public class TestCouchDB {
       //DesignDocument designDoc = couchDbClient.design().getFromDesk("couchview.js");
       //System.out.println(designDoc);
    }
-
    @Test
    public void test2(){
-      List<Twitter> china = twitterDao.searchByCountry("china");
+      List<Tweet> china = twitterDao.searchByCountry("china");
       System.out.println(china);
    }
 
+//   List<Foo> list = dbClient.view("example/foo")
+//           .startKey("start-key")
+//           .endKey("end-key")
+//           .limit(10)
+//           .includeDocs(true)
+//           .query(Foo.class);
+
+
+    /**
+     * local db test index Country
+     */
+   @Test
+   public void test3() throws IOException {
+       CouchDbClient dbClient = new CouchDbClient("myhistorical", false, "http", "127.0.0" +
+               ".1",
+               5984,
+               "admin", "123456");
+       List<Tweet> list = dbClient.view("HistoricalInfo/Country")
+               .key("China")
+               .includeDocs(true)
+               .query(Tweet.class);
+       dbClient.close();
+       list.forEach(ele -> System.out.println(ele));
+   }
+
+    /**
+     * historical database(local db): test index(country,created_at)
+     * Requirement: ask for Tweets(country: china, date from 2014-07-28 to 2014-07-31) from
+     * historical database.
+     */
+    @Test
+    public void test4() throws IOException {
+       ArrayList start = new ArrayList<String>();
+       start.add("China");
+       start.add("2014-07-28");
+       ArrayList end = new ArrayList<String>();
+       end.add("China");
+       end.add("2014-07-31");
+       CouchDbClient dbClient = new CouchDbClient("myhistorical", false, "http", "127.0.0" +
+               ".1",
+               5984,
+               "admin", "123456");
+       List<Tweet> list = dbClient.view("HistoricalInfo/CountryAndCreated_at")
+               .startKey(start) //["China","2014-07-28"]
+               .endKey(end) //["China","2014-07-30"]
+               .includeDocs(true)
+               .query(Tweet.class);
+       dbClient.close();
+       list.forEach(ele -> System.out.println(ele));
+    }
+    @Test
+    public void test5(){
+//        List<Tweet> china = new HistoricalTweetDaoImpl().findByCountryPeriod("China", "2014-07-28", "2014-07-31");
+//        System.out.println(china);
+        int num = new HistoricalTweetDaoImpl().countByCountryAndTag("China", 1);
+        System.out.println(num);
+    }
 }

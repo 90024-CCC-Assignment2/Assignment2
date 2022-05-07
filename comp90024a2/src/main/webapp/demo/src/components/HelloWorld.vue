@@ -29,7 +29,7 @@
       </li>
       <li>
         <a
-          href="https://twitter.com/vuejs"
+          href="https://tweet.com/vuejs"
           target="_blank"
         >
           Twitter

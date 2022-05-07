@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Twitter {
+public class Tweet {
     /**
      *     "_id": "1149012336147144705",
      *     "_rev": "1-0a9becbd6c80cba34d8cc8459a8bc4eb",
@@ -26,7 +26,7 @@ public class Twitter {
     private String created_at;
     private String user_name;
     private String user_avatar;
-    private String coordinates;
+    private Coordinates coordinates;
     private String pictures;
     private String country;
     private Integer tag;
