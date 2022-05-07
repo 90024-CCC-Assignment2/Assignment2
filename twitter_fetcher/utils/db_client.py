@@ -34,7 +34,11 @@ class DBClient:
     def put_record(self, db_name, record):
         db_name = str(db_name).lower()
         self.create_db(db_name)
-        if record['_id'] not in self.get_database(db_name):
+        try:
+            if record['_id'] not in self.get_database(db_name):
+                self.get_database(db_name).create_document(record)
+                return True
+        except KeyError as e:
             self.get_database(db_name).create_document(record)
             return True
         return False
