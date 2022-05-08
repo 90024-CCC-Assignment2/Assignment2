@@ -34,7 +34,7 @@
               >
                 <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
                   <b-col xl="6" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
-                    <b-form-radio value="RESTful">RESTful</b-form-radio>
+                    <b-form-radio value="Restful">RESTful</b-form-radio>
                     <p></p>
                     <strong>Query data period:</strong>
                     <strong>R:2020.01.01~Now</strong>
@@ -90,7 +90,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      dataType: 'RESTful',
+      dataType: 'Restful',
       period: '1w',
       country: 'China',
       periodOption: [

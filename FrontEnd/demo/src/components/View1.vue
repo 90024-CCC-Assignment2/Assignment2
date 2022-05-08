@@ -128,7 +128,7 @@ export default {
       axios.get(url, {
         params: {
           'country': country,
-          'dataType': 'streaming',
+          'dataType': 'Streaming',
           'period': '1w'
         }
       }).then(function (resp) {

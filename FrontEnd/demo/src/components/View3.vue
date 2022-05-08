@@ -6,8 +6,8 @@
         <div id='map2' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 480px;'></div>
       </b-col>
       <b-col xl="6" style='background-color: antiquewhite; padding: 0px; margin: 0px; border: 0px'>
-        <div id='map3' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 400px;'></div>
-        <div id='map4' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 480px;'></div>
+        <div id='info' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 200px;'></div>
+        <div id='map3' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 680px;'></div>
       </b-col>
     </b-row>
   </b-container>
@@ -15,16 +15,26 @@
 
 <script>
 import * as echarts from 'echarts'
+import axios from 'axios'
 
 export default {
   name: 'View3',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      countries: ['China', 'Thai', 'Korea', 'Japan', 'Mexican', 'India', 'Italy', 'America', 'Spain', 'Turkey', 'Greece', 'Pakistan', 'Ukraine', 'Australia']
+      countries: ['China', 'Thai', 'Korea', 'Japan', 'Mexican', 'India', 'Italy', 'America', 'Spain', 'Turkey', 'Greece', 'Pakistan', 'Ukraine', 'Australia'],
+      category: ['Eastern Asia', 'Southern Asia', 'Australia', 'America and Mexican', 'Europe'],
+      restaurants: [
+        [120, 132, 101, 134],
+        [220, 182, 191, 234],
+        [150, 232, 201, 154],
+        [320, 332, 301, 334],
+        [820, 932, 901, 934]
+      ]
     }
   },
   created () {
+    this.getData()
   },
   mounted () {
     const chartDom1 = document.getElementById('map1')
@@ -135,8 +145,139 @@ export default {
       series: [{type: 'bar'}, {type: 'bar', stack: 'stack'}, {type: 'bar', stack: 'stack'}]
     }
     option2 && myChart2.setOption(option2)
+    const chartDom3 = document.getElementById('map3')
+    const myChart3 = echarts.init(chartDom3)
+    let option3 = {
+      title: {
+        text: 'Restaurant Increasing Chart',
+        top: '5%'
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          }
+        }
+      },
+      legend: {
+        data: this.category,
+        top: '10%'
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {}
+        }
+      },
+      grid: {
+        top: '20%',
+        left: '5%',
+        right: '5%',
+        bottom: '7%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          type: 'category',
+          boundaryGap: false,
+          data: ['2002', '2007', '2012', '2017']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Eastern Asia',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: this.restaurants[0]
+        },
+        {
+          name: 'Southern Asia',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: this.restaurants[1]
+        },
+        {
+          name: 'Australia',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: this.restaurants[2]
+        },
+        {
+          name: 'America and Mexican',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: this.restaurants[3]
+        },
+        {
+          name: 'Europe',
+          type: 'line',
+          stack: 'Total',
+          label: {
+            show: true,
+            position: 'top'
+          },
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: this.restaurants[4]
+        }
+      ]
+    }
+    option3 && myChart3.setOption(option3)
   },
   methods: {
+    getData: function () {
+      console.log('Call getData()')
+      this.getCount1('Restful')
+      this.getCount2()
+    },
+    getCount1: function (type) {
+      console.log('Call getData()')
+      const that = this
+      let url = 'https://localhost:8080/count-tag'
+      axios.get(url, {
+      }).then(function (resp) {
+        that.imgs = resp.data
+        return resp.data
+      }).catch(resp => {
+        console.log('请求失败：' + resp.status + ',' + resp.statusText)
+      })
+    },
+    getCount2: function () {
+      console.log('Call getData()')
+      const that = this
+      let url = 'https://localhost:8080/search-pic'
+      axios.get(url, {
+      }).then(function (resp) {
+        that.imgs = resp.data
+        return resp.data
+      }).catch(resp => {
+        console.log('请求失败：' + resp.status + ',' + resp.statusText)
+      })
+    }
   }
 }
 </script>
