@@ -124,7 +124,7 @@ export default {
     getData: function (country) {
       const that = this
       console.log(country)
-      let url = 'https://localhost:8080/testcontroller/test3'
+      let url = 'https://localhost:8080/search-tweet'
       axios.get(url, {
         params: {
           'country': country,

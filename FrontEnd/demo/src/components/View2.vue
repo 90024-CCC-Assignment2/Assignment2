@@ -37,6 +37,8 @@
                     <b-form-radio value="RESTful">RESTful</b-form-radio>
                     <p></p>
                     <strong>Query data period:</strong>
+                    <strong>R:2020.01.01~Now</strong>
+                    <strong>H:2014.07.29~2017.06.29</strong>
                   </b-col>
                   <b-col xl="6" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
                     <b-form-radio value="Historical">Historical</b-form-radio>
@@ -53,27 +55,27 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
-          <b-col xl="2" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
-          </b-col>
-          <b-col xl="8" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
-            <b-carousel
-              id="carousel-food"
-              style="text-shadow: 0px 0px 2px #000; top: 20px"
-              interval:5000
-              fade
-              indicators
-            >
-              <div v-for="item in imgs" :key="item.id">
-                <b-carousel-slide
-                  v-bind:img-src="item.src"
-                ></b-carousel-slide>
-              </div>
-            </b-carousel>
-          </b-col>
-          <b-col xl="2" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
-          </b-col>
-        </b-row>
+<!--        <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>-->
+<!--          <b-col xl="2" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>-->
+<!--          </b-col>-->
+<!--          <b-col xl="8" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>-->
+<!--            <b-carousel-->
+<!--              id="carousel-food"-->
+<!--              style="text-shadow: 0px 0px 2px #000; top: 20px"-->
+<!--              interval:5000-->
+<!--              fade-->
+<!--              indicators-->
+<!--            >-->
+<!--              <div v-for="item in imgs" :key="item.id">-->
+<!--                <b-carousel-slide-->
+<!--                  v-bind:img-src="item.src"-->
+<!--                ></b-carousel-slide>-->
+<!--              </div>-->
+<!--            </b-carousel>-->
+<!--          </b-col>-->
+<!--          <b-col xl="2" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>-->
+<!--          </b-col>-->
+<!--        </b-row>-->
       </b-col>
     </b-row>
   </b-container>
@@ -97,7 +99,8 @@ export default {
         { value: '3m', text: '3 Month' },
         { value: '6m', text: '6 Month' },
         { value: '1y', text: '1 Year' },
-        { value: '2y', text: '2 Year' }
+        { value: '2y', text: '2 Year' },
+        { value: '3y', text: '3 Year' }
       ],
       typeData: [
         {'Number': null, 'Positive😄': null, 'Negative😠': null, 'Rate': null}
@@ -168,8 +171,13 @@ export default {
   methods: {
     getData: function (country, type, period) {
       console.log('Call getData(' + country + ',' + type + ',' + period + ')')
+      this.getImages(country, type, period)
+      this.getTwitters(country, type, period)
+    },
+    getImages: function (country, type, period) {
+      console.log('Call getImages(' + country + ',' + type + ',' + period + ')')
       const that = this
-      let url = 'https://localhost:8080/testcontroller/test3'
+      let url = 'https://localhost:8080/search-pic'
       axios.get(url, {
         params: {
           'country': country,
@@ -177,10 +185,28 @@ export default {
           'period': period
         }
       }).then(function (resp) {
+        that.imgs = resp.data
         return resp.data
       }).catch(resp => {
         console.log('请求失败：' + resp.status + ',' + resp.statusText)
-        console.log('request type:' + type)
+      })
+    },
+    getTwitters: function (country, type, period) {
+      console.log('Call getData(' + country + ',' + type + ',' + period + ')')
+      const that = this
+      let url = 'https://localhost:8080/search-tweet'
+      axios.get(url, {
+        params: {
+          'country': country,
+          'dataType': type,
+          'period': period
+        }
+      }).then(function (resp) {
+        that.geoJson = resp.data
+        that.map.getSource('points').setData(that.geoJson.data)
+        return resp.data
+      }).catch(resp => {
+        console.log('请求失败：' + resp.status + ',' + resp.statusText)
         const geoJson = {
           'type': 'geojson',
           'data': {
