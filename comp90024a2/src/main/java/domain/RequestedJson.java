@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestedJson {
+public class RequestedJson<T> {
     private String type;
-    private Data data;
+    private T data;
 }

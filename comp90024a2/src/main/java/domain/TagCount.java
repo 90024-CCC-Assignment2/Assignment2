@@ -11,10 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TagCount {
     private String country;
-    //dislike
-    private Integer countForZero;
+    private Integer totalCount;
     //like
     private Integer countForOne;
-    private Integer totalCount;
+    //dislike
+    private Integer countForZero;
+
 }
 

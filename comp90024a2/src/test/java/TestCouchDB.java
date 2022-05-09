@@ -10,7 +10,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -168,5 +171,17 @@ public class TestCouchDB {
 //        System.out.println(china);
         int num = new HistoricalTweetDaoImpl().countByCountryAndTag("China", 1);
         System.out.println(num);
+    }
+
+    /**
+     * Test time set method
+     */
+    @Test
+    public void test6() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(format.parse("2020-01-01"));
+        calendar.add(Calendar.DATE,-2);
+        System.out.println(format.format(calendar.getTime()));
     }
 }

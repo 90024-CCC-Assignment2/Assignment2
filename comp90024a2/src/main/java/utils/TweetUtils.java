@@ -1,20 +1,14 @@
-package service;
+package utils;
 
-import dao.TwitterDao;
+
 import domain.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class StreamingTwitterService {
-    @Autowired
-    private TwitterDao twitterDao;
+public class TweetUtils {
 
-    public List<Feature> searchByCountry(String country) {
-        List<Tweet> tweets = twitterDao.searchByCountry(country);
+    public static List<Feature> getFeatures(List<Tweet> tweets) {
         ArrayList<Feature> features = new ArrayList<>();
         for (Tweet tweet : tweets) {
             Feature feature = new Feature();
