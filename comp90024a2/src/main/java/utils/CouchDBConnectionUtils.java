@@ -5,8 +5,8 @@ import org.lightcouch.CouchDbClient;
 public class CouchDBConnectionUtils {
 
     public static CouchDbClient getConn(String dbName) {
-        CouchDbClient conn = new CouchDbClient(dbName, false, "http", "127.0.0.1", 5984,
-                "admin", "123456");
+        CouchDbClient conn = new CouchDbClient(dbName, false, "http", "172.26.133.175", 5984,
+                "admin", "password1234");
         return conn;
     }
 
