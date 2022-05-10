@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import service.IAurinService;
 import service.ITweetService;
 import utils.Constant;
 
@@ -23,6 +24,8 @@ public class TweetController {
     private ITweetService restfulTweetServiceImpl;
     @Autowired
     private ITweetService streamingTweetServiceImpl;
+    @Autowired
+    private IAurinService aurinServiceImpl;
 
 
     @RequestMapping(path = "/search-tweet", method = RequestMethod.GET)
@@ -82,5 +85,4 @@ public class TweetController {
         JsonResult success = JsonResult.success(tweet_count);
         return success;
     }
-
 }

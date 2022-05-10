@@ -14,5 +14,8 @@ public class Constant {
     public static final String DB_TYPE_HISTORICAL = "historical";
     public static final String DB_TYPE_RESTFUl = "restful";
     public static final String DB_TYPE_STREAMING = "streaming";
+    public static final List<String> AURIN_COUNTRY_LIST = Arrays.asList("America and Mexican",
+            "Australia","Eastern Asia","Europe","Southern Asia");
+
 
 }

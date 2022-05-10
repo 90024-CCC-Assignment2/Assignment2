@@ -184,4 +184,12 @@ public class TestCouchDB {
         calendar.add(Calendar.DATE,-2);
         System.out.println(format.format(calendar.getTime()));
     }
+
+    @Test
+    public void testAurin(){
+        CouchDbClient conn = new CouchDbClient("aurin_2002", false, "http", "172.26.133.175", 5984,
+                "admin", "password1234");
+        int count = conn.view("Aurin2002Info/Country").key("America and Mexican").queryForInt();
+        System.out.println(count);
+    }
 }
