@@ -177,7 +177,7 @@ export default {
     getImages: function (country, type, period) {
       console.log('Call getImages(' + country + ',' + type + ',' + period + ')')
       const that = this
-      let url = 'https://localhost:8080/search-pic'
+      let url = 'https://172.26.133.175:8080:8080/search-pic'
       axios.get(url, {
         params: {
           'country': country,
@@ -194,7 +194,7 @@ export default {
     getTwitters: function (country, type, period) {
       console.log('Call getData(' + country + ',' + type + ',' + period + ')')
       const that = this
-      let url = 'https://localhost:8080/search-tweet'
+      let url = 'https://172.26.133.175:8080:8080/search-tweet'
       axios.get(url, {
         params: {
           'country': country,

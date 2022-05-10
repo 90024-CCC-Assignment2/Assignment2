@@ -6,8 +6,7 @@
         <div id='map2' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 480px;'></div>
       </b-col>
       <b-col xl="6" style='background-color: antiquewhite; padding: 0px; margin: 0px; border: 0px'>
-        <div id='info' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 200px;'></div>
-        <div id='map3' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 680px;'></div>
+        <div id='map3' style='padding: 0px; margin: 0px; border: 0px; width: 100%; height: 880px;'></div>
       </b-col>
     </b-row>
   </b-container>
@@ -23,13 +22,13 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App',
       countries: ['China', 'Thai', 'Korea', 'Japan', 'Mexican', 'India', 'Italy', 'America', 'Spain', 'Turkey', 'Greece', 'Pakistan', 'Ukraine', 'Australia'],
-      category: ['Eastern Asia', 'Southern Asia', 'Australia', 'America and Mexican', 'Europe'],
+      category: ['America and Mexican', 'Eastern Asia', 'Europe', 'Southern Asia', 'Australia'],
       restaurants: [
-        [120, 132, 101, 134],
-        [220, 182, 191, 234],
-        [150, 232, 201, 154],
-        [320, 332, 301, 334],
-        [820, 932, 901, 934]
+        [30, 34, 42, 48, 49, 49, 56, 68, 73, 75, 80, 84, 101, 104, 107, 109],
+        [562, 591, 638, 677, 716, 762, 769, 789, 821, 810, 808, 826, 815, 799, 826, 802],
+        [83, 94, 115, 129, 144, 154, 161, 198, 217, 236, 236, 249, 252, 247, 253, 245],
+        [40, 42, 38, 47, 57, 70, 72, 76, 82, 104, 120, 117, 135, 140, 147, 142],
+        [20, 22, 24, 30, 37, 50, 65, 74, 72, 75, 73, 70, 73, 73, 74, 74]
       ]
     }
   },
@@ -90,8 +89,15 @@ export default {
           data: [
             { value: 176838, name: 'China' },
             { value: 161078, name: 'India' },
+            { value: 133300, name: 'England' },
+            { value: 79054, name: 'Vietnam' },
+            { value: 78906, name: 'New Zealand' },
+            { value: 63332, name: 'Sri Lanka' },
             { value: 63332, name: 'Italy' },
+            { value: 47642, name: 'Malaysia' },
             { value: 45618, name: 'Greece' },
+            { value: 45157, name: 'Philippines' },
+            { value: 24168, name: 'South Africa' },
             { value: 20033, name: 'Pakistan' },
             { value: 16765, name: 'America' },
             { value: 14861, name: 'Turkey' },
@@ -150,7 +156,8 @@ export default {
     let option3 = {
       title: {
         text: 'Restaurant Increasing Chart',
-        top: '5%'
+        subtext: 'Data Source: City of Melbourne CLUE Cafes, Restaurants and Bistros Seats(AURIN)',
+        left: 'center'
       },
       tooltip: {
         trigger: 'axis',
@@ -163,7 +170,7 @@ export default {
       },
       legend: {
         data: this.category,
-        top: '10%'
+        top: '12%'
       },
       toolbox: {
         feature: {
@@ -181,7 +188,7 @@ export default {
         {
           type: 'category',
           boundaryGap: false,
-          data: ['2002', '2007', '2012', '2017']
+          data: ['2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017']
         }
       ],
       yAxis: [
@@ -191,7 +198,7 @@ export default {
       ],
       series: [
         {
-          name: 'Eastern Asia',
+          name: 'America and Mexican',
           type: 'line',
           stack: 'Total',
           areaStyle: {},
@@ -201,17 +208,7 @@ export default {
           data: this.restaurants[0]
         },
         {
-          name: 'Southern Asia',
-          type: 'line',
-          stack: 'Total',
-          areaStyle: {},
-          emphasis: {
-            focus: 'series'
-          },
-          data: this.restaurants[1]
-        },
-        {
-          name: 'Australia',
+          name: 'Eastern Asia',
           type: 'line',
           stack: 'Total',
           areaStyle: {},
@@ -221,7 +218,7 @@ export default {
           data: this.restaurants[2]
         },
         {
-          name: 'America and Mexican',
+          name: 'Europe',
           type: 'line',
           stack: 'Total',
           areaStyle: {},
@@ -231,7 +228,7 @@ export default {
           data: this.restaurants[3]
         },
         {
-          name: 'Europe',
+          name: 'Southern Asia',
           type: 'line',
           stack: 'Total',
           label: {
@@ -243,6 +240,16 @@ export default {
             focus: 'series'
           },
           data: this.restaurants[4]
+        },
+        {
+          name: 'Australia',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: this.restaurants[1]
         }
       ]
     }
