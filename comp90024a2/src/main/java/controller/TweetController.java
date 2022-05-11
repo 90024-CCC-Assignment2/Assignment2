@@ -32,11 +32,7 @@ public class TweetController {
     @ResponseBody
     public JsonResult searchByDbTypeCountryPeriod(String dbType, String country, String period) throws ParseException {
         List<Feature> features;
-        System.out.println(dbType);
-        System.out.println(country);
-        System.out.println(period);
         if (dbType.equals(Constant.DB_TYPE_HISTORICAL)){
-            System.out.println("111111");
             features = historicalTweetServiceImpl.searchByCountryPeriod(country, period);
         }else if (dbType.equals(Constant.DB_TYPE_RESTFUl)){
             features = restfulTweetServiceImpl.searchByCountryPeriod(country,period);

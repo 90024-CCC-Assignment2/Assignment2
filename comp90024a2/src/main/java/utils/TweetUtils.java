@@ -12,7 +12,7 @@ public class TweetUtils {
         ArrayList<Feature> features = new ArrayList<>();
         for (Tweet tweet : tweets) {
             Feature feature = new Feature();
-            feature.setId(tweet.getId());
+            feature.setId(tweet.get_id());
             feature.setType(tweet.getCountry());
             feature.setCreated_at(tweet.getCreated_at());
             feature.setProperties(new Properties(new Content(tweet.getText(),
@@ -23,5 +23,20 @@ public class TweetUtils {
             features.add(feature);
         }
         return features;
+    }
+
+    public static <T> List<List<T>> zip(List<T>... lists) {
+        List<List<T>> zipped = new ArrayList<List<T>>();
+        for (List<T> list : lists) {
+            for (int i = 0, listSize = list.size(); i < listSize; i++) {
+                List<T> list2;
+                if (i >= zipped.size())
+                    zipped.add(list2 = new ArrayList<T>());
+                else
+                    list2 = zipped.get(i);
+                list2.add(list.get(i));
+            }
+        }
+        return zipped;
     }
 }

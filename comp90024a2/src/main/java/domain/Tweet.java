@@ -20,7 +20,7 @@ public class Tweet {
      *     "country": "China",
      *     "tag": 1
      */
-    private String id;
+    private String _id;
     private String _rev;
     private String text;
     private String created_at;
