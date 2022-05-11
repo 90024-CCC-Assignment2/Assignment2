@@ -33,7 +33,7 @@ export default {
     }
   },
   created () {
-    this.getData()
+    this.getCount('restful')
   },
   mounted () {
     const chartDom1 = document.getElementById('map1')
@@ -128,20 +128,17 @@ export default {
       dataset: {
         source: [
           ['#Twitter', 'All', 'Positive', 'Negative'],
-          ['China', 43.3, 85.8, 93.7],
-          ['Thai', 83.1, 73.4, 55.1],
-          ['Korea', 86.4, 65.2, 82.5],
-          ['Japan', 72.4, 53.9, 39.1],
-          ['Mexican', 43.3, 85.8, 93.7],
-          ['India', 83.1, 73.4, 55.1],
-          ['Italy', 86.4, 65.2, 82.5],
-          ['America', 72.4, 53.9, 39.1],
-          ['Spain', 43.3, 85.8, 93.7],
-          ['Turkey', 83.1, 73.4, 55.1],
-          ['Greece', 86.4, 65.2, 82.5],
-          ['Pakistan', 72.4, 53.9, 39.1],
-          ['Ukraine', 86.4, 65.2, 82.5],
-          ['Australia', 72.4, 53.9, 39.1]
+          ['China', 2247, 1708, 539],
+          ['Thai', 38, 36, 2],
+          ['Korea', 32, 24, 8],
+          ['Japan', 1021, 738, 283],
+          ['Mexican', 194, 156, 38],
+          ['India', 302, 248, 54],
+          ['Italy', 657, 515, 142],
+          ['America', 1285, 1038, 247],
+          ['Spain', 65, 61, 4],
+          ['Pakistan', 36, 31, 5],
+          ['Australia', 133, 106, 27]
         ]
       },
       xAxis: { type: 'category' },
@@ -256,30 +253,14 @@ export default {
     option3 && myChart3.setOption(option3)
   },
   methods: {
-    getData: function () {
-      console.log('Call getData()')
-      this.getCount1('Restful')
-      this.getCount2()
-    },
-    getCount1: function (type) {
-      console.log('Call getData()')
-      const that = this
-      let url = 'https://localhost:8080/count-tag'
+    getCount: function (type) {
+      let url = 'http://172.26.133.175:8080/comp90024a2/tweet/count-all-tags'
       axios.get(url, {
+        params: {
+          'dbType': type
+        }
       }).then(function (resp) {
-        that.imgs = resp.data
-        return resp.data
-      }).catch(resp => {
-        console.log('请求失败：' + resp.status + ',' + resp.statusText)
-      })
-    },
-    getCount2: function () {
-      console.log('Call getData()')
-      const that = this
-      let url = 'https://localhost:8080/search-pic'
-      axios.get(url, {
-      }).then(function (resp) {
-        that.imgs = resp.data
+        console.log(resp.data)
         return resp.data
       }).catch(resp => {
         console.log('请求失败：' + resp.status + ',' + resp.statusText)

@@ -34,14 +34,14 @@
               >
                 <b-row style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
                   <b-col xl="6" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
-                    <b-form-radio value="Restful">RESTful</b-form-radio>
+                    <b-form-radio value="restful">RESTful</b-form-radio>
                     <p></p>
                     <strong>Query data period:</strong>
                     <strong>R:2020.01.01~Now</strong>
                     <strong>H:2014.07.29~2017.06.29</strong>
                   </b-col>
                   <b-col xl="6" style='background-color: darkgrey; padding: 0px; margin: 0px; border: 0px'>
-                    <b-form-radio value="Historical">Historical</b-form-radio>
+                    <b-form-radio value="historical">Historical</b-form-radio>
                     <p></p>
                     <b-form-select v-model="period" :options="periodOption"></b-form-select>
                   </b-col>
@@ -90,7 +90,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      dataType: 'Restful',
+      dataType: 'restful',
       period: '1w',
       country: 'China',
       periodOption: [
@@ -140,15 +140,15 @@ export default {
             'source': 'points',
             'minzoom': 7,
             'paint': {
-              'circle-radius': 10,
+              'circle-radius': 5,
               'circle-color': [
                 'interpolate',
                 ['linear'],
                 ['get', 'attitude_label'],
                 0,
-                'rgb(103,169,207)',
+                'rgb(178,24,43)',
                 1,
-                'rgb(178,24,43)'
+                'rgb(103,169,207)'
               ],
               'circle-stroke-color': 'white',
               'circle-stroke-width': 1,
@@ -177,15 +177,17 @@ export default {
     getImages: function (country, type, period) {
       console.log('Call getImages(' + country + ',' + type + ',' + period + ')')
       const that = this
-      let url = 'https://172.26.133.175:8080:8080/search-pic'
+      let url = 'http://172.26.133.175:8080/comp90024a2/tweet/search-pic'
       axios.get(url, {
         params: {
           'country': country,
-          'dataType': type,
+          'dbType': type,
           'period': period
         }
       }).then(function (resp) {
-        that.imgs = resp.data
+        console.log(JSON.parse(JSON.stringify(resp.data.data)))
+        const imgs = JSON.parse(JSON.stringify(resp.data.data))
+        that.imgs = imgs
         return resp.data
       }).catch(resp => {
         console.log('请求失败：' + resp.status + ',' + resp.statusText)
@@ -194,114 +196,34 @@ export default {
     getTwitters: function (country, type, period) {
       console.log('Call getData(' + country + ',' + type + ',' + period + ')')
       const that = this
-      let url = 'https://172.26.133.175:8080:8080/search-tweet'
+      let url = 'http://172.26.133.175:8080/comp90024a2/tweet/search-tweet'
       axios.get(url, {
         params: {
           'country': country,
-          'dataType': type,
+          'dbType': type,
           'period': period
         }
       }).then(function (resp) {
-        that.geoJson = resp.data
+        const geoJson = JSON.parse(JSON.stringify(resp.data.data))
+        let num = geoJson.data.features.length
+        let pos = 0
+        let neg = 0
+        for (let i = 0; i < num; i++) {
+          let item = geoJson.data.features[i]
+          if (item.properties.attitude_label === 1) {
+            pos += 1
+          } else {
+            neg += 1
+          }
+        }
+        that.typeData = [{'Number': num, 'Positive😄': pos, 'Negative😠': neg, 'Rate': (pos / (pos + neg) * 100).toFixed(2) + '%'}]
+        that.geoJson = geoJson
         that.map.getSource('points').setData(that.geoJson.data)
         return resp.data
       }).catch(resp => {
         console.log('请求失败：' + resp.status + ',' + resp.statusText)
-        const geoJson = {
-          'type': 'geojson',
-          'data': {
-            'type': 'FeatureCollection',
-            'features': [
-              {
-                'id': '123',
-                'type': 'Feature',
-                'created_at': '2022-04-29 19:07',
-                'properties': {
-                  'content': {
-                    'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
-                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg'
-                  },
-                  'user': {
-                    'username': 'mallory',
-                    'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
-                  },
-                  'attitude_label': 0
-                },
-                'geometry': {
-                  'type': 'Point',
-                  'coordinates': [144.9695, -37.8227]
-                }
-              },
-              {
-                'id': '1234',
-                'type': 'Feature',
-                'created_at': '2022-04-29 19:07',
-                'properties': {
-                  'content': {
-                    'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
-                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg'
-                  },
-                  'user': {
-                    'username': 'mallory',
-                    'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
-                  },
-                  'attitude_label': 0
-                },
-                'geometry': {
-                  'type': 'Point',
-                  'coordinates': [144.995, -37.8427]
-                }
-              },
-              {
-                'id': '12345',
-                'type': 'Feature',
-                'created_at': '2022-04-29 19:07',
-                'properties': {
-                  'content': {
-                    'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
-                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg'
-                  },
-                  'user': {
-                    'username': 'mallory',
-                    'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
-                  },
-                  'attitude_label': 1
-                },
-                'geometry': {
-                  'type': 'Point',
-                  'coordinates': [144.9795, -37.8027]
-                }
-              },
-              {
-                'id': '123456',
-                'type': 'Feature',
-                'created_at': '2022-04-29 19:07',
-                'properties': {
-                  'content': {
-                    'text': 'sample textsample textsample textsample textsample textsample textsample textsample textsample textsample text',
-                    'img_url': 'https://media.timeout.com/images/105655794/1372/772/image.jpg'
-                  },
-                  'user': {
-                    'username': 'mallory',
-                    'profile_img_url': 'https://www.shareicon.net/data/512x512/2016/07/26/802043_man_512x512.png'
-                  },
-                  'attitude_label': 1
-                },
-                'geometry': {
-                  'type': 'Point',
-                  'coordinates': [144.9395, -37.8128]
-                }
-              }
-            ]
-          }
-        }
-        that.typeData = [{'Number': 4, 'Positive😄': 2, 'Negative😠': 2, 'Rate': '50%'}]
+        const geoJson = null
         that.geoJson = geoJson
-        that.imgs = [
-          {id: 1, src: 'https://img-cdn-china-admissions.imgix.net/wp-content/uploads/2020/02/Chinese-food.jpg?auto=format%2Cenhance%2Ccompress'},
-          {id: 2, src: 'https://www.kohinoor-joy.com/wp-content/uploads/2020/01/indo-chinese-food.jpg'},
-          {id: 3, src: 'https://venues.ipaypro.co/media/cuisineImages/Chinesecuisinenearme.jpg'}
-        ]
         that.map.getSource('points').setData(that.geoJson.data)
       })
     }
