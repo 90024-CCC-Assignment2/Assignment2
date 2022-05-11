@@ -3,6 +3,7 @@ package dao.impl;
 import dao.ITweetDao;
 import domain.Tweet;
 import org.lightcouch.CouchDbClient;
+import org.lightcouch.NoDocumentException;
 import org.springframework.stereotype.Component;
 import utils.CouchDBConnectionUtils;
 
@@ -35,7 +36,12 @@ public class StreamingTweetDaoImpl implements ITweetDao {
         key.add(country);
         key.add(tag);
         CouchDbClient conn = CouchDBConnectionUtils.getConn("streaming");
-        int count = conn.view("StreamingInfo/CountryAndTag").key(key).queryForInt();
+        int count;
+        try {
+            count = conn.view("StreamingInfo/CountryAndTag").key(key).queryForInt();
+        }catch (NoDocumentException e){
+            count = 0;
+        }
         CouchDBConnectionUtils.closeConn(conn);
         return count;
     }

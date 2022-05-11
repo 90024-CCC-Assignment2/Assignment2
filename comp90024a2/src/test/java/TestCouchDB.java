@@ -1,16 +1,13 @@
-import dao.TwitterDao;
 import dao.impl.HistoricalTweetDaoImpl;
 import domain.Person;
 import domain.Tweet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lightcouch.CouchDbClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,8 +22,7 @@ public class TestCouchDB {
   // private TestDao testDao;
 //   @Autowired
 //   private CouchDbClient couchDbClient;
-   @Autowired
-   private TwitterDao twitterDao;
+
    /**
     * Test Retrieve Resource
     */
@@ -109,11 +105,11 @@ public class TestCouchDB {
       //DesignDocument designDoc = couchDbClient.design().getFromDesk("couchview.js");
       //System.out.println(designDoc);
    }
-   @Test
-   public void test2(){
-      List<Tweet> china = twitterDao.searchByCountry("china");
-      System.out.println(china);
-   }
+//   @Test
+//   public void test2(){
+//      List<Tweet> china = twitterDao.searchByCountry("china");
+//      System.out.println(china);
+//   }
 
 //   List<Foo> list = dbClient.view("example/foo")
 //           .startKey("start-key")
@@ -177,7 +173,7 @@ public class TestCouchDB {
      * Test time set method
      */
     @Test
-    public void test6() throws ParseException {
+    public void test6() throws Exception {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(format.parse("2020-01-01"));

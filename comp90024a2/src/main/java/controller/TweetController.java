@@ -32,11 +32,15 @@ public class TweetController {
     @ResponseBody
     public JsonResult searchByDbTypeCountryPeriod(String dbType, String country, String period) throws ParseException {
         List<Feature> features;
-        if (dbType == Constant.DB_TYPE_HISTORICAL){
+        System.out.println(dbType);
+        System.out.println(country);
+        System.out.println(period);
+        if (dbType.equals(Constant.DB_TYPE_HISTORICAL)){
+            System.out.println("111111");
             features = historicalTweetServiceImpl.searchByCountryPeriod(country, period);
-        }else if (dbType == Constant.DB_TYPE_RESTFUl){
+        }else if (dbType.equals(Constant.DB_TYPE_RESTFUl)){
             features = restfulTweetServiceImpl.searchByCountryPeriod(country,period);
-        }else if (dbType == Constant.DB_TYPE_STREAMING){
+        }else if (dbType.equals(Constant.DB_TYPE_STREAMING)){
             features = streamingTweetServiceImpl.searchByCountryPeriod(country,period);
         }else {
             return JsonResult.error("Parameter error");
@@ -52,11 +56,11 @@ public class TweetController {
     @ResponseBody
     public JsonResult searchPictureByDbTypeCountryPeriod(String dbType, String country, String period) throws ParseException {
         List<String> urls;
-        if (dbType == Constant.DB_TYPE_HISTORICAL){
+        if (dbType.equals(Constant.DB_TYPE_HISTORICAL)){
             urls = historicalTweetServiceImpl.searchPictureByCountryPeriod(country,period);
-        }else if (dbType == Constant.DB_TYPE_RESTFUl){
+        }else if (dbType.equals(Constant.DB_TYPE_RESTFUl)){
             urls = restfulTweetServiceImpl.searchPictureByCountryPeriod(country,period);
-        }else if (dbType == Constant.DB_TYPE_STREAMING){
+        }else if (dbType.equals(Constant.DB_TYPE_STREAMING)){
             urls = streamingTweetServiceImpl.searchPictureByCountryPeriod(country,period);
         }else {
             JsonResult parameter_error = JsonResult.error("Parameter error");
@@ -71,11 +75,11 @@ public class TweetController {
     @ResponseBody
     public JsonResult countAllTags(String dbType) {
         List<TagCount> tagCounts;
-        if (dbType == Constant.DB_TYPE_HISTORICAL){
+        if (dbType.equals(Constant.DB_TYPE_HISTORICAL)){
             tagCounts = historicalTweetServiceImpl.countTag();
-        }else if (dbType == Constant.DB_TYPE_RESTFUl){
+        }else if (dbType.equals(Constant.DB_TYPE_RESTFUl)){
             tagCounts = restfulTweetServiceImpl.countTag();
-        }else if (dbType == Constant.DB_TYPE_STREAMING){
+        }else if (dbType.equals(Constant.DB_TYPE_STREAMING)){
             tagCounts = streamingTweetServiceImpl.countTag();
         }else {
             JsonResult parameter_error = JsonResult.error("Parameter error");
