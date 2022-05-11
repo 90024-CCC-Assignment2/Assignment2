@@ -1,15 +1,12 @@
-import configparser
-import requests
-import json
-from collections import Counter
 from utils import db_client
-from utils.Configuration import *
-from torch.utils.data import Dataset, DataLoader
+from Configuration import *
+from utils.Tweet import TweetAttributeFilter
+from nltk.tokenize import TweetTokenizer
 
-from mpi4py import MPI
+import argparse
+
 import tweepy
 import time
-
 
 """
 For now I don't think I have already incorporate rate limit waiting mechanism into the code. (New tweepy calls it differently?)
@@ -18,46 +15,13 @@ around 10-15 tweets/min.
 """
 
 ######################
-parser = configparser.ConfigParser()
-parser.read("credentials.ini")
 # Define some static variables
-MELBOURNE_CITY_BOUNDING_BOX = [144.932, -37.882, 144.996, -37.775]  # ????
-
-THRESHOLD = 60
-RULES = ["graffiti", "street art", "painting"]  # TODO to be added
-###################### 
-communicator = MPI.COMM_WORLD
-
-
-class Grid:
-    """
-    Class for defining a grid (for now just in city of Melbourne). We want to divide the city into multiple areas
-    and collect meta-data (counts for instance) for front-end live demo.
-    """
-    def __init__(self, rows, columns):
-        # directly hard coding it.
-        self.north = -37.775
-        self.south = -37.882 
-        self.east = 144.996
-        self.west = 144.932
-        self.rows = rows
-        self.columns = columns
-        self.partitions = rows * columns
-        # for simplicity, we start from the southwest corner and traverse it row by row
-        self.lats = [self.west + (i * (self.east - self.west) / self.columns) for i in range(columns)]
-        self.longs = [self.south + (i * (self.north - self.south) / self.rows) for i in range(rows)]
-
-    def get_block_spot(self, id):
-        """
-        Input the id of a particular block, return 4 coordinates of its corners.
-        """
-        pass
-
-    def get_grid_no(self, coordinate):
-        """
-        Input the coordinate, return its grid number, -1 if not in our map
-        """
-        lat, longi = coordinate
+THRESHOLD = 3
+BAD_WORDS = set()
+with open("External_Data/negative_words.txt") as f:
+    for line in f.readlines():
+        BAD_WORDS.add(line.strip())
+######################
 
 
 class TwitterAuthenticator:
@@ -66,41 +30,60 @@ class TwitterAuthenticator:
     We use id to assign the api credential of this particular process (process id in a multi-process situaiton)
     """
 
-    def __init__(self):
-        # parser = configparser.ConfigParser()
-        # parser.read("credential.ini")
-        self.api_key = parser["Twitter{}".format(0)]["api_key"]
-        self.api_key_secret = parser["Twitter{}".format(0)]["api_key_secret"]
-        self.access_token = parser["Twitter{}".format(0)]["access_token"]
-        self.access_token_secret = parser["Twitter{}".format(0)]["access_token_secret"]
+    def __init__(self, id):
+        parser = configparser.ConfigParser()
+        parser.read("credentials.ini")
+        self.api_key = parser["Twitter-{}".format(id)]["api_key"]
+        self.api_key_secret = parser["Twitter-{}".format(id)]["api_key_secret"]
+        self.bearer_token = parser["Twitter-{}".format(id)]['bearer_token']
+        self.access_token = parser["Twitter-{}".format(id)]["access_token"]
+        self.access_token_secret = parser["Twitter-{}".format(id)]["access_token_secret"]
     
     def authenticate(self):
         auth = tweepy.OAuthHandler(self.api_key, self.api_key_secret)
         auth.set_access_token(self.access_token, self.access_token_secret)
-        
+
         return auth
 
     def get_keys(self):
-        return self.api_key, self.api_key_secret, self.access_token, self.access_token_secret
+        return self.api_key, self.api_key_secret, self.bearer_token, self.access_token, self.access_token_secret
 
 
 class TwitterStreamListener(tweepy.Stream):
     """
     Class for processing streaming twitters
     """
-    def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret, rows, work_type, columns, **kwargs):
+    def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret, id, **kwargs):
         super().__init__(consumer_key, consumer_secret, access_token, access_token_secret, **kwargs)
-        self.grid_worker = LocationCounter(rows, columns)
+        # self.grid_worker = LocationCounter(rows, columns)
         self.buffer = []
-        self.db_client = db_client.DBClient(USER_NAME, PASSWORD, URL)
-        self.work_type = work_type
+        try:
+            client1 = db_client.DBClient(USER_NAME_1, PASSWORD_1, URL_1)
+        except:
+            client1 = None
+        try:
+            client2 = db_client.DBClient(USER_NAME_2, PASSWORD_2, URL_2)
+        except:
+            client2 = None
+        try:
+            client3 = db_client.DBClient(USER_NAME_3, PASSWORD_3, URL_3)
+        except:
+            client3 = None
+        self.db_clients = [client1, client2, client3]
+        self.id = id
+
+        self.external_cuisines = json.load(open('External_Data/Cuisine.json'))['list']
+        self.tokenizer = TweetTokenizer()
+        self.tweet_filter = TweetAttributeFilter()
 
     def on_status(self, status):
         self.buffer.append(status)
+        print(len(self.buffer))
         if len(self.buffer) > THRESHOLD:
+            print("start processing")
             self.process()
             # avoid rate limit
-            time.sleep(500)
+            time.sleep(850)
             self.buffer.clear()
 
         return True
@@ -111,60 +94,64 @@ class TwitterStreamListener(tweepy.Stream):
             return True
         print(status_code)
 
+    def get_client(self, id):
+        client = self.db_clients[id]
+        failed = 0
+        while client is None:
+            id = (id + 1) % 3
+            client = self.db_clients[id]
+            failed += 1
+            if failed == 3:
+                print("Failed to connect to any of the database")
+                raise ConnectionError
+
+        return client
+
     def process(self):
         """
         for now we just hand the twitter over tocouchdb and do area counting
         """
-
-        # TODO not quite sure if it is a good strategy to establish short http connection to couchdb everytime receiving a new json data 
         for status in self.buffer:
             try:
-                data_to_store = status._json
-                # db_name = {YYYY-MM-DD_topic}
-                self.db_client.put_record()
+                raw_json = status._json
+                text = raw_json['text']
+                tokens = self.tokenizer.tokenize(text)
+                for country_cuisine in self.external_cuisines:
+                    country = country_cuisine['country']
+                    cuisine = set(country_cuisine['cuisine'])
+                    flag, tag = 0, 1
+                    for token in tokens:
+                        if token.lower() in cuisine:
+                            flag = 1
+
+                    if flag == 1:
+                        for token in tokens:
+                            if token in BAD_WORDS:
+                                tag = 0
+
+                            db_json = self.tweet_filter.to_db_json(raw_json, country, tag, None)
+                            try:
+                                self.get_client(self.id).put_record("streaming", db_json)
+                            except Exception:  # cannot put a record, database connection lost
+                                self.get_client(self.id).put_record("streaming", db_json)
+                        break
             except:
                 continue
 
-        # TODO How are we actually going to do this? 
-        # db = DBS[communicator.Get_rank()]
-        # response = requests.post("http://" + USER_NAME + ":" + PASSWORD + "@172.17.0.4:5984/" + db, json=data_to_store)
-        # print("one write operation with {}".format(response.status_code))
-        # self.grid_worker.work(data_to_store)
 
-
-class LocationCounter:
-    """
-    For now it is just a location counter, we might upgrade this class for it to do more ambitious tasks in the future.
-    """
-    def __init__(self, rows, columns):
-        self.grid = Grid(rows, columns)
-        self.counts = Counter()
-        self.rank = communicator.Get_rank()
-    
-    def work(self, twitter):
-        """
-        This grid counter can work only based on the provided coordinates attribute in the json file.
-        However, one interesting worth mentioning is that among twitters with geo information, most of
-        them
-        """
-        coordinates = twitter['coordinates']
-        if coordinates is not None:
-            pass
-
-
-def main():
-    tweet_api = tweepy.API(TwitterAuthenticator().authenticate(), wait_on_rate_limit=True)
-    api_key, api_key_secret, access_token, access_token_secret = TwitterAuthenticator().get_keys()
-    streamer = TwitterStreamListener(api_key, api_key_secret, access_token, access_token_secret, 5, 5)
-    streamer.filter(track=[])
+def main(id):
+    api_key, api_key_secret, bearer_token, access_token, access_token_secret = TwitterAuthenticator(id).get_keys()
+    print("123123123")
+    streamer = TwitterStreamListener(api_key, api_key_secret, access_token, access_token_secret, id)
+    print("Start...")
+    streamer.filter(track=['Melbourne', 'Carlton', 'Monash', 'Docklands', 'Southbank', 'Parkiville', 'Lygon'
+                           'Flemington', 'Swanston', 'Yarra', 'Queen Victoria Market', 'Wharf', 'Aussie',
+                           'Melbourne China Town'])
 
 
 if __name__ == "__main__":
-    # if process_rank == 0:
-    #     # streamer.filter(track=[""])  # TODO fill in the coordinate filter rule
-    #     streamer.filter(track=RULES, locations=MELBOURNE_CITY_BOUNDING_BOX)
-    #     # pass
-    # else:
-    #     rule = RULES[process_rank-1]
-    #     streamer.filter(track=["melbourne {}".format(rule)], languages=["en"])
-    pass
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--id", type=int, help="Specify the machine this process reside on")
+    args = parser.parse_args()
+    id = args.id
+    main(id)

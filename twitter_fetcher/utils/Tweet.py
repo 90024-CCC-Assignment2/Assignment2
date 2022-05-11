@@ -7,7 +7,7 @@ class TweetAttributeFilter:
 
     def to_db_json(self, raw_json, country, tag, Areas):
         new_json = dict()
-        new_json['_id'] = str(raw_json['_id'])
+        new_json['_id'] = str(raw_json['id'])
         new_json['text'] = str(raw_json['text'])
         try:
             new_json['created_at'] = str(datetime.strptime(raw_json['created_at'], '%a %b %d %H:%M:%S %z %Y'))
@@ -16,9 +16,10 @@ class TweetAttributeFilter:
         # new_json['created_at'] = datetime.strptime(raw_json['created_at'], ""))
         new_json['user_name'] = str(raw_json['user']['screen_name'])
         new_json['user_avatar'] = str(raw_json['user']['profile_image_url'])
+
         if raw_json['coordinates'] is not None:
             new_json['coordinates'] = raw_json['coordinates']
-        else:
+        elif Areas is not None:
             # TODO fake coordinate, remember to delete after using it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             ############################################################
             area = random.choice(Areas)

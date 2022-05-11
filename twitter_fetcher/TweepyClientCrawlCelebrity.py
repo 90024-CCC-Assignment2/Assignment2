@@ -4,14 +4,10 @@ import tweepy
 from utils.db_client import DBClient
 from utils.Tweet import TweetAttributeFilter
 from nltk import TweetTokenizer
+from twitter_streaming import TwitterAuthenticator, BAD_WORDS
+import configparser
 import time
 from datetime import datetime
-
-
-BAD_WORDS = set()
-with open("External_Data/negative_words.txt") as f:
-    for line in f.readlines():
-        BAD_WORDS.add(line.strip())
 
 
 def process(client, tweet, Areas, db='Restful'):
@@ -38,21 +34,16 @@ def process(client, tweet, Areas, db='Restful'):
                         Tag = 0
                         break
 
-
                 # 7 Put in database
                 client.put_record(db, TweetAttributeFilter().to_db_json(tweet, country, Tag, Areas))
                 break
 
 # ==================================KEY==================================
-api_key = "T7A3QS2KpZ7gLquq2YQmGFRVT"
-api_key_secret = "O91ujNgwI0PjxVIM4mRjZNrYDbAI6TxdeAxkYEodMpplXafPp9"
-bearer_token = "AAAAAAAAAAAAAAAAAAAAAL6ebwEAAAAAUgjIxZ1LxDR9GOQAamnqDUSZvvY%3DnTjGukeZWaysdNDSOm3vHXwCbnupkVOqDQ17zyNP6bj1NEJEGl"
-access_token = "1518824432869208065-LveG04DpyB9iFqllV8ETa5h8m0g0Ay"
-access_token_secret = "gBREHjjrGNejrAFw10x5fp8GUcxGs03P3yLm1XOyRE2zn"
+authenticator = TwitterAuthenticator(0)
+api_key, api_key_secret, bearer_token, access_token, access_token_secret = authenticator.get_keys()
 
 
 def main():
-    # =======================================================================
 
     # ==========================Tweepy Client================================
     Client = tweepy.Client(bearer_token=bearer_token)
