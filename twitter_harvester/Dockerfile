@@ -1,15 +1,13 @@
 #
-# Part of Assignment 2 - COMP90024 course at The University of Melbourne 
-#
-# Cluster and Cloud Computing - Team 24 
+# COMP90024 Cluster and Cloud Computing Assignment2 - Team 42 
 # 
 # Authors: 
 #
-#  * Liam Simon (Student ID: 1128453)
-#  * Rejoy Benjamin (Student ID: 1110935)
-#  * Parikshit Diwan (Student ID: 1110497)
-#  * Colin McLean (Student ID: 1139518)
-#  * Matthias Bachfischer (Student ID: 1133751)
+#  - Haoyu Gao (Student ID: 1141213)
+#  - Runqi Zhao (Student ID: 1159719)
+#  - Shukai Liu (Student ID: 1233459)
+#  - Siyu Liu (Student ID：1094521)
+#  - Wenjun Wang (Student ID: 1249890)
 #
 # Location: Melbourne
 #
