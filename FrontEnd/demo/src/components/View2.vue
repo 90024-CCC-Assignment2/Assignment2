@@ -1,3 +1,16 @@
+#
+# COMP90024 Cluster and Cloud Computing Assignment2 - Team 42
+#
+# Authors:
+#
+#  - Haoyu Gao (Student ID: 1141213)
+#  - Runqi Zhao (Student ID: 1159719)
+#  - Shukai Liu (Student ID: 1233459)
+#  - Siyu Liu (Student ID：1094521)
+#  - Wenjun Wang (Student ID: 1249890)
+#
+# Location: Melbourne
+#
 <template>
   <b-container class="bv-example-row" fluid style='padding: 0px; width: 100%; margin: 0px; border: 0px'>
     <b-row style='padding: 0px; margin: 0px; border: 0px'>
