@@ -7,6 +7,7 @@
 
     <!--scan component, especially controller-->
     <context:component-scan base-package="controller"/>
+    <context:component-scan base-package="handler"/>
     <!--Configure the mvc annotation driver-->
     <mvc:annotation-driven/>
     <!--Use the default handler : allow static resources access-->
