@@ -7,7 +7,7 @@ class TweetAttributeFilter:
 
     def to_db_json(self, raw_json, country, tag, Areas):
         new_json = dict()
-        new_json['_id'] = str(raw_json['id'])
+        new_json['_id'] = str(raw_json['_id'])
         new_json['text'] = str(raw_json['text'])
         try:
             new_json['created_at'] = str(datetime.strptime(raw_json['created_at'], '%a %b %d %H:%M:%S %z %Y'))
@@ -24,14 +24,19 @@ class TweetAttributeFilter:
             ############################################################
             area = random.choice(Areas)
             coords_bound = area['geo']
-            longi = random.random() * (int(coords_bound['up']) - int(coords_bound['down'])) + int(coords_bound['down'])
-            lat = random.random() * (int(coords_bound['right']) - int(coords_bound['left'])) + int(coords_bound['left'])
+            longi = random.random() * (float(coords_bound['up']) - float(coords_bound['down'])) + float(coords_bound['down'])
+            lat = random.random() * (float(coords_bound['right']) - float(coords_bound['left'])) + float(coords_bound['left'])
             new_json['coordinates'] = {"type": "Point", "coordinates": (lat, longi)}
             ############################################################
+
         try:
             new_json['pictures'] = raw_json['extended_tweet']['extended_entities']['media'][0]
         except:
-            new_json['pictures'] = ""
+            try:
+                print(raw_json.keys())
+                new_json['pictures'] = raw_json['entities']['media'][0]['media_url']
+            except:
+                new_json['pictures'] = ""
         new_json['country'] = country
         new_json['tag'] = tag
 

@@ -6,7 +6,6 @@ from TweepyClientCrawlCelebrity import process
 """
 Historical data are preloaded into our couch db, no need to execute this piece of script.
 """
-
 def main():
     db_client = DBClient('admin', 'password1234', 'http://localhost:5984/')
     with open("External_Data/areas.json") as f_areas:

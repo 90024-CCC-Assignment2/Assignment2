@@ -21,6 +21,10 @@ BAD_WORDS = set()
 with open("External_Data/negative_words.txt") as f:
     for line in f.readlines():
         BAD_WORDS.add(line.strip())
+SENSITIVE_WORDS = set()
+with open("External_Data/inappropriate_words.txt") as f:
+    for line in f.readlines():
+        SENSITIVE_WORDS.add(line.strip())
 ######################
 
 

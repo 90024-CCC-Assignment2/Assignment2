@@ -4,7 +4,7 @@ import tweepy
 from utils.db_client import DBClient
 from utils.Tweet import TweetAttributeFilter
 from nltk import TweetTokenizer
-from twitter_streaming import TwitterAuthenticator, BAD_WORDS
+from twitter_streaming import TwitterAuthenticator, BAD_WORDS, SENSITIVE_WORDS
 import configparser
 import time
 from datetime import datetime
@@ -12,6 +12,7 @@ from datetime import datetime
 
 def process(client, tweet, Areas, db='Restful'):
     with open("./External_Data/Cuisine.json") as f_cuisine:
+
         json_cuisine = json.load(f_cuisine)
         Cuisines = json_cuisine['list']
         for country_cuisine in Cuisines:
@@ -21,6 +22,12 @@ def process(client, tweet, Areas, db='Restful'):
             tokenizer = TweetTokenizer()
             tokens = tokenizer.tokenize(tweet['text'])
             flag = False
+
+            for swear_word in SENSITIVE_WORDS:
+                # filter all the inappropriate words
+                if swear_word in tokens:
+                    continue
+
             for token in tokens:
                 if token in cuisines:
                     flag = True
