@@ -1,0 +1,22 @@
+[DataNodes]
+172.26.133.175
+172.26.134.231
+172.26.130.200
+
+[Masternode]
+172.26.133.175
+
+[ProcessingNode]
+172.26.133.211
+
+[DataNodes:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/ccc_assignment2.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[ProcessingNode:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/ccc_assignment2.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'

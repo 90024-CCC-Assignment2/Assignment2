@@ -1,0 +1,46 @@
+#
+# COMP90024 Cluster and Cloud Computing Assignment2 - Team 42 
+# 
+# Authors: 
+#
+#  - Haoyu Gao (Student ID: 1141213)
+#  - Runqi Zhao (Student ID: 1159719)
+#  - Shukai Liu (Student ID: 1233459)
+#  - Siyu Liu (Student ID：1094521)
+#  - Wenjun Wang (Student ID: 1249890)
+#
+# Location: Melbourne
+#
+---
+- name: Gather facts of remote host
+  ansible.builtin.setup:
+    gather_subset: all
+
+# Install dependencies 
+- name: Install dependencies
+  tags: always
+  become: yes
+  ansible.builtin.apt:
+    name: ['apt-transport-https', 'git', 'python3-dev', 'python3-pip', 'python3-setuptools','build-essential', 'ca-certificates', 'curl', 'software-properties-common', 'unzip', 'vim']
+    state: latest
+    install_recommends: no
+    update_cache: yes
+  environment: "{{ proxy_env }}"
+
+# Update pip for python software
+- name: Update pip for python software
+  tags: always
+  become: yes
+  ansible.builtin.pip:
+    name: ['pip']
+    state: latest
+  environment: "{{ proxy_env }}"
+
+
+# Install needed python packages
+- name: Install needed python packages
+  ansible.builtin.pip:
+    name: ['nltk', 'tweepy', 'cloudant']
+  become: yes
+  environment: "{{ proxy_env }}"
+  

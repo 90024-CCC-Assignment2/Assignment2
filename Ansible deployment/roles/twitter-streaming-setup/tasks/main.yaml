@@ -1,0 +1,45 @@
+#
+# COMP90024 Cluster and Cloud Computing Assignment2 - Team 42 
+# 
+# Authors: 
+#
+#  - Haoyu Gao (Student ID: 1141213)
+#  - Runqi Zhao (Student ID: 1159719)
+#  - Shukai Liu (Student ID: 1233459)
+#  - Siyu Liu (Student ID：1094521)
+#  - Wenjun Wang (Student ID: 1249890)
+#
+# Location: Melbourne
+#
+---
+# Clone source code from github to virtual machine directory
+- name: Clone source code from github to virtual machine directory
+  ansible.builtin.git:
+    repo: "https://github.com/90024-CCC-Assignment2/Assignment2.git"
+    dest: ~/ccc_assignment2
+  environment: "{{ proxy_env }}"
+  become: yes
+
+# Ensure docker configuration directory exists or create it
+- name: Ensure docker configuration directory exists or create it
+  become: yes
+  ansible.builtin.file:
+    path: '~/.docker'
+    state: 'directory'
+
+# Ensure docker proxy for MRC exists
+- name: Ensure docker proxy for MRC exists
+  become: yes
+  ansible.builtin.copy:
+    content: "{{ docker_proxy_settings }}"
+    dest: ~/.docker/config.json
+
+
+# Run script to setup Twitter Streaming (Harvester)
+- name: Run script to setup Twitter Streaming (Harvester)
+  ansible.builtin.command: 'python3 ~/ccc_assignment2/twitter_fetcher/twitter_streaming.py'
+  become: yes
+  run_once: true
+
+
+

@@ -1,0 +1,96 @@
+#
+# COMP90024 Cluster and Cloud Computing Assignment2 - Team 42 
+# 
+# Authors: 
+#
+#  - Haoyu Gao (Student ID: 1141213)
+#  - Runqi Zhao (Student ID: 1159719)
+#  - Shukai Liu (Student ID: 1233459)
+#  - Siyu Liu (Student ID：1094521)
+#  - Wenjun Wang (Student ID: 1249890)
+#
+# Location: Melbourne
+#
+
+# Common vars
+instance_flavor: uom.mse.2c9g
+availability_zone: melbourne-qh2-uom
+instance_image: 356ff1ed-5960-4ac2-96a1-0c0198e6a999
+instance_key_name: ccc_assignment2
+
+# Volume
+volumes:
+  - vol_name: server-1-volume-data
+    vol_size: 80
+  - vol_name: server-1-volume-docker
+    vol_size: 20
+  - vol_name: server-2-volume-data
+    vol_size: 80
+  - vol_name: server-2-volume-docker
+    vol_size: 20
+  - vol_name: server-3-volume-data
+    vol_size: 80
+  - vol_name: server-3-volume-docker
+    vol_size: 20
+  - vol_name: server-4-volume-data
+    vol_size: 80
+  - vol_name: server-4-volume-docker
+    vol_size: 20
+
+# Security group
+security_groups:
+  - name: public_communication
+    description: "Security group for public communication such as SSH and HTTP access and Frontend"
+  - name: private_communication
+    description: "Security group for private communication between CouchDB nodes"
+
+security_group_rules_public: 
+  - name: public_communication
+    protocol: tcp
+    port_range_min: 22
+    port_range_max: 22
+    remote_ip_prefix: 0.0.0.0/0
+  - name: public_communication
+    protocol: tcp
+    port_range_min: 5984
+    port_range_max: 5984
+    remote_ip_prefix: 0.0.0.0/0
+  - name: public_communication
+    protocol: tcp
+    port_range_min: 80
+    port_range_max: 80
+    remote_ip_prefix: 0.0.0.0/0
+  - name: public_communication
+    protocol: tcp
+    port_range_min: 8000
+    port_range_max: 8000
+    remote_ip_prefix: 0.0.0.0/0
+
+security_group_rules_private: 
+  - name: private_communication
+    protocol: tcp
+    port_range_min: 9100
+    port_range_max: 9200
+    remote_group: private_communication
+  - name: private_communication
+    protocol: tcp
+    port_range_min: 5984
+    port_range_max: 5984
+    remote_group: private_communication
+  - name: private_communication
+    protocol: tcp
+    port_range_min: 4369
+    port_range_max: 4369
+    remote_group: private_communication
+
+
+# Instance
+instances:
+  - name: server-1
+    volumes: ['server-1-volume-data', 'server-1-volume-docker']
+  - name: server-2
+    volumes: ['server-2-volume-data', 'server-2-volume-docker']
+  - name: server-3
+    volumes: ['server-3-volume-data', 'server-3-volume-docker']
+  - name: server-4
+    volumes: ['server-4-volume-data', 'server-4-volume-docker']

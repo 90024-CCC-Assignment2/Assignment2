@@ -1,0 +1,22 @@
+#
+# COMP90024 Cluster and Cloud Computing Assignment2 - Team 42 
+# 
+# Authors: 
+#
+#  - Haoyu Gao (Student ID: 1141213)
+#  - Runqi Zhao (Student ID: 1159719)
+#  - Shukai Liu (Student ID: 1233459)
+#  - Siyu Liu (Student ID：1094521)
+#  - Wenjun Wang (Student ID: 1249890)
+#
+# Location: Melbourne
+#
+---
+# Install nodejs and npm needed for front end
+- name: Install nodejs and npm needed for front end
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+    name: ["nodejs", "npm"]
+    state: present
+  
