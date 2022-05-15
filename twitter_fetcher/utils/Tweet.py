@@ -33,7 +33,6 @@ class TweetAttributeFilter:
             new_json['pictures'] = raw_json['extended_tweet']['extended_entities']['media'][0]
         except:
             try:
-                print(raw_json.keys())
                 new_json['pictures'] = raw_json['entities']['media'][0]['media_url']
             except:
                 new_json['pictures'] = ""
