@@ -1,0 +1,53 @@
+#
+# COMP90024 Cluster and Cloud Computing Assignment2 - Team 42 
+# 
+# Authors: 
+#
+#  - Haoyu Gao (Student ID: 1141213)
+#  - Runqi Zhao (Student ID: 1159719)
+#  - Shukai Liu (Student ID: 1233459)
+#  - Siyu Liu (Student ID：1094521)
+#  - Wenjun Wang (Student ID: 1249890)
+#
+# Location: Melbourne
+#
+---
+
+# Create a security group
+- name: Create a security group
+  openstack.cloud.security_group:
+    name: '{{ item.name }}'
+    description: '{{ item.description }}'
+    state: present
+  loop: '{{ security_groups }}'
+
+# Create a list of security group names
+- name: Create a list of security group names
+  ansible.builtin.set_fact:
+    sg_names: '{{ sg_names|default([]) + [ item.name ] }}'
+  loop: '{{ security_groups }}'
+
+- ansible.builtin.debug:
+    msg: "Security group(s) {{ sg_names }} have been created."
+
+# Create security group rules applying remote_ip_prefix
+- name: Create security group rules for internet-based communication
+  openstack.cloud.security_group_rule:
+    security_group: '{{ item.name }}'
+    protocol: '{{ item.protocol }}'
+    port_range_min: '{{ item.port_range_min }}'
+    port_range_max: '{{ item.port_range_max }}'
+    remote_ip_prefix: '{{ item.remote_ip_prefix }}'
+    state: present
+  loop: '{{ security_group_rules_public }}'
+
+# Create security group rules applying remote_group prefix
+- name: Create security group rules for communication between cluster nodes
+  openstack.cloud.security_group_rule:
+    security_group: '{{ item.name }}'
+    protocol: '{{ item.protocol }}'
+    port_range_min: '{{ item.port_range_min }}'
+    port_range_max: '{{ item.port_range_max }}'
+    remote_group: '{{ item.remote_group }}'
+    state: present
+  loop: '{{ security_group_rules_private }}'

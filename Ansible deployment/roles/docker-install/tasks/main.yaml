@@ -1,0 +1,115 @@
+#
+# COMP90024 Cluster and Cloud Computing Assignment2 - Team 42 
+# 
+# Authors: 
+#
+#  - Haoyu Gao (Student ID: 1141213)
+#  - Runqi Zhao (Student ID: 1159719)
+#  - Shukai Liu (Student ID: 1233459)
+#  - Siyu Liu (Student ID：1094521)
+#  - Wenjun Wang (Student ID: 1249890)
+#
+# Location: Melbourne
+#
+---
+# Uninstall old Docker
+- name: Uninstall old docker
+  become: yes
+  ansible.builtin.apt:
+    name: ['docker', 'docker-engine', 'docker.io']
+    state: absent
+
+# Install dependencies new docker needs
+- name: Install dependencies new docker needs
+  become: yes
+  ansible.builtin.apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'python-setuptools', 'software-properties-common']
+    state: latest
+    install_recommends: no
+    update_cache: yes
+  environment: "{{ proxy_env }}"
+
+# Add and update Docker repository key
+- name: Add and update docker repository key
+  become: yes
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  environment: "{{ proxy_env }}"
+
+# Add and update Docker repository
+- name: Add and update docker repository
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: "deb https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
+    mode: '644'
+    update_cache: yes
+    state: present
+  environment: "{{proxy_env}}"
+
+# Install the new Docker
+- name: Install the new docker
+  become: yes
+  ansible.builtin.apt:
+    name: ['docker-ce']
+    state: latest
+    install_recommends: no
+    update_cache: yes
+  environment: "{{proxy_env}}"
+
+# Install new Docker compose
+- name: Install new docker-compose
+  tags: 'docker'
+  become: yes
+  ansible.builtin.pip:
+    name: ['docker-compose']
+    state: latest
+  environment: "{{proxy_env}}"
+
+# Make sure relevant systemd directory exists
+- name: Make sure relevant systemd directory exists
+  ansible.builtin.file:
+    path: '/etc/systemd/system'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+
+# Make sure docker.service.d directory exists
+- name: Make sure docker.service.d directory exists
+  ansible.builtin.file:
+    path: '/etc/systemd/system/docker.service.d'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+  become: yes
+
+# Configure relevant Docker proxy
+- name: Configure relevant docker proxy
+  ansible.builtin.template:
+    src: 'http-proxy.conf.j2'
+    dest: '/etc/systemd/system/docker.service.d/http-proxy.conf'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  when: (ansible_service_mgr == 'systemd' and
+        (proxy_env.http_proxy is defined or proxy_env.https_proxy is defined))
+  become: yes
+
+# Reload systemd daemons
+- name: Reload systemd daemons
+  ansible.builtin.command: systemctl daemon-reload
+  become: yes
+
+# Reload Docker daemon
+- name: Reload docker daemon
+  ansible.builtin.command: systemctl restart docker
+  become: yes
+
+# Reload Docker
+- name: Reload docker
+  ansible.builtin.service:
+    name: docker
+    state: restarted
+  become: yes

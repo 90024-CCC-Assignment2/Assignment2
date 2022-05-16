@@ -1,0 +1,44 @@
+#
+# COMP90024 Cluster and Cloud Computing Assignment2 - Team 42 
+# 
+# Authors: 
+#
+#  - Haoyu Gao (Student ID: 1141213)
+#  - Runqi Zhao (Student ID: 1159719)
+#  - Shukai Liu (Student ID: 1233459)
+#  - Siyu Liu (Student ID：1094521)
+#  - Wenjun Wang (Student ID: 1249890)
+#
+# Location: Melbourne
+#
+---
+# Install jdk
+- name: Install jdk
+  ansible.builtin.apt:
+    name: default-jdk
+    state: present
+  become: yes
+  environment: "{{ proxy_env }}"
+
+# Download tomcat server packages(v10.0.20)
+- name: Download tomcat server packages(v10.0.20)
+  ansible.builtin.get_url:
+    url: http://mirrors.estointernet.in/apache/tomcat/tomcat-10/v10.0.20/bin/apache-tomcat-10.0.20.tar.gz
+    dest: /usr/local
+  become: yes
+  environment: "{{ proxy_env }}"
+
+# Unarchive tomcat server packages
+- name: Unarchive tomcat server packages
+  ansible.builtin.unarchive:
+    src: /usr/local/apache-tomcat-10.0.20.tar.gz
+    dest: /usr/local
+    remote_src: yes
+  become: yes
+  environment: "{{ proxy_env }}"
+
+# Start and enable tomcat services
+- name: Start and enable tomcat services
+  ansible.builtin.shell: nohup /usr/local/apache-tomcat-10.0.20/bin/startup.sh
+  become: yes
+  environment: "{{ proxy_env }}"
